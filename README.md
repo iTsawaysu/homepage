@@ -6,6 +6,10 @@
 
 一个开源的个人主页项目，用来展示我的个人介绍、项目、文章和案例内容；项目基于 Astro 静态构建。
 
+## 在线预览
+
+可以直接打开线上预览查看当前页面效果：[https://homepage-three-wheat.vercel.app/](https://homepage-three-wheat.vercel.app/)
+
 ## 功能
 
 - 个人介绍、项目展示、文章列表和案例详情。
