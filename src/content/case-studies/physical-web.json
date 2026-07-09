@@ -1,0 +1,33 @@
+{
+  "title": "Open Design",
+  "category": "coding",
+  "tldr": "一个本地优先的 AI 设计工作台，把 Claude Code、Codex、Cursor、OpenCode 等 coding agent 变成设计引擎，用真实文件生成原型、仪表盘、PPT、图片和视频。",
+  "role": "产品架构分析 / 前端工作流整理",
+  "challenges": [
+    "AI 设计工具很容易停留在聊天窗口或一次性产物里。真正要交付时，团队需要可预览、可导出、可复用、能被设计系统约束的真实文件。",
+    "另一个难点是 agent 生态很分散：不同 CLI、不同模型、不同导出格式和不同品牌规范，如果没有统一工作台，设计流程会被配置和搬运打断。"
+  ],
+  "solutions": [
+    "Open Design 把设计 brief、技能、插件、DESIGN.md 设计系统和 sandboxed iframe preview 放进同一套本地桌面工作流里，让 agent 输出的不是截图，而是 HTML、PDF、PPTX、MP4 等可继续使用的文件。",
+    "它同时支持多种 coding agent 和 BYOK / OpenAI-compatible endpoint，把生成、预览、 critique、导出和复用串在一起。这个方向更像是 agent 时代的开放设计操作台，而不是传统画布工具的替代皮肤。"
+  ],
+  "technology": [
+    "TypeScript",
+    "HTML / CSS",
+    "Astro",
+    "MCP",
+    "Design Systems"
+  ],
+  "images": {
+    "large": {
+      "url": "/assets/homepage/images/coding-open-design.svg",
+      "padding": 56.25
+    },
+    "small": "/assets/homepage/images/coding-open-design.svg"
+  },
+  "url": {
+    "live": "https://github.com/nexu-io/open-design",
+    "local": "/#/case-study/open-design"
+  },
+  "order": 1
+}

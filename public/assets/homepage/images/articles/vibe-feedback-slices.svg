@@ -1,0 +1,12 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 360" role="img" aria-labelledby="title desc">
+<title id="title">Feedback Slices</title>
+<desc id="desc">one question per pass</desc>
+<style>
+  .bg{fill:#fffaf0}.ink{fill:#20242c}.muted{fill:#5e6673}.line{stroke:#20242c;stroke-width:4;stroke-linecap:round;stroke-linejoin:round}.thin{stroke:#20242c;stroke-width:2;stroke-linecap:round}.accent{fill:#e53935}.accent-line{stroke:#e53935;stroke-width:5;stroke-linecap:round;stroke-linejoin:round}.title{font:700 34px Arial,sans-serif;fill:#20242c}.label{font:700 16px Arial,sans-serif;fill:#20242c}.small{font:14px Arial,sans-serif;fill:#5e6673}.mono{font:700 13px monospace;fill:#20242c}
+</style>
+<rect class="bg" width="900" height="360"/>
+<path d="M0 310H900M0 250H900M0 190H900M0 130H900M0 70H900M110 0V360M230 0V360M350 0V360M470 0V360M590 0V360M710 0V360M830 0V360" stroke="#e6decf" stroke-width="1" opacity=".7"/>
+<text x="48" y="62" class="title">Feedback Slices</text>
+<text x="50" y="326" class="small">one question per pass</text>
+<rect x="190" y="104" width="520" height="28" rx="8" fill="#f5f7fb" stroke="#20242c" stroke-width="3"/><rect x="190" y="104" width="80" height="28" rx="8" fill="#e53935" opacity=".85"/><text x="450" y="124" text-anchor="middle" class="mono">Understand</text><rect x="218" y="138" width="464" height="28" rx="8" fill="#fff" stroke="#20242c" stroke-width="3"/><rect x="218" y="138" width="92" height="28" rx="8" fill="#e53935" opacity=".85"/><text x="450" y="158" text-anchor="middle" class="mono">Core flow</text><rect x="246" y="172" width="408" height="28" rx="8" fill="#f5f7fb" stroke="#20242c" stroke-width="3"/><rect x="246" y="172" width="104" height="28" rx="8" fill="#e53935" opacity=".85"/><text x="450" y="192" text-anchor="middle" class="mono">Visual density</text><rect x="274" y="206" width="352" height="28" rx="8" fill="#fff" stroke="#20242c" stroke-width="3"/><rect x="274" y="206" width="116" height="28" rx="8" fill="#e53935" opacity=".85"/><text x="450" y="226" text-anchor="middle" class="mono">Edge state</text><rect x="302" y="240" width="296" height="28" rx="8" fill="#f5f7fb" stroke="#20242c" stroke-width="3"/><rect x="302" y="240" width="128" height="28" rx="8" fill="#e53935" opacity=".85"/><text x="450" y="260" text-anchor="middle" class="mono">Ship check</text><path d="M146 100v184M754 100v184" class="line" opacity=".25"/>
+</svg>

@@ -1,0 +1,27 @@
+{
+  "name": "homepage",
+  "version": "0.1.0",
+  "description": "An Astro static personal profile showcase for iTsawaysu.",
+  "private": true,
+  "license": "MIT",
+  "type": "module",
+  "scripts": {
+    "dev": "astro dev --host 127.0.0.1 --port 5174",
+    "build": "astro check && astro build",
+    "preview": "astro preview --host 127.0.0.1 --port 5174",
+    "check": "astro check",
+    "check:assets": "node scripts/check-assets.mjs"
+  },
+  "dependencies": {
+    "astro": "^7.0.6",
+    "gsap": "^3.15.0"
+  },
+  "devDependencies": {
+    "@astrojs/check": "^0.9.9",
+    "playwright": "^1.61.1",
+    "typescript": "^6.0.3"
+  },
+  "engines": {
+    "node": "^20.19.0 || >=22.12.0"
+  }
+}

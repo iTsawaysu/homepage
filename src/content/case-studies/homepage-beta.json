@@ -1,0 +1,32 @@
+{
+  "title": "AI 设计助手工作流",
+  "category": "design",
+  "tldr": "把 AI 当作设计搭档，而不是自动出图机器：从问题定义、线框草图、界面文案到视觉收敛，建立一套可复盘、可落地的设计工作流。",
+  "role": "产品设计 / 前端实现 / AI 工作流整理",
+  "challenges": [
+    "AI 产出很快，但也很容易把需求、视觉和交互揉在一起。初稿看起来完整，落到真实页面时却常常缺少边界、状态和取舍。",
+    "如果只靠反复抽卡，很难得到稳定的设计质量。真正需要固定下来的，是用户任务、品牌语气、组件约束和验收标准。"
+  ],
+  "solutions": [
+    "先用一页 brief 锁定目标用户、核心任务、禁区和内容优先级，再让 AI 分别参与信息架构、线框、文案和视觉方向，而不是一次性要求它给出最终稿。",
+    "每一轮产出都放回真实前端约束中验证：看长文案是否撑破布局、移动端是否仍然清晰、空状态和错误状态是否完整，再决定保留哪些设计判断。"
+  ],
+  "technology": [
+    "ChatGPT / Claude",
+    "Figma",
+    "HTML / CSS",
+    "Playwright 截图校验"
+  ],
+  "images": {
+    "large": {
+      "url": "/assets/homepage/images/design-ai-workflow.svg",
+      "padding": 62
+    },
+    "small": "/assets/homepage/images/design-thumb-chatgpt-figma.svg"
+  },
+  "url": {
+    "live": null,
+    "local": "/#/case-study/ai-design-workflow"
+  },
+  "order": 3
+}

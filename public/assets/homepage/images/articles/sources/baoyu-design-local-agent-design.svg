@@ -1,0 +1,38 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 360" role="img" aria-labelledby="title desc">
+<title id="title">Baoyu Local Design Loop</title>
+<desc id="desc">A local agent loop from repository files to localhost preview and back to editable HTML</desc>
+<defs>
+  <pattern id="grid" width="28" height="28" patternUnits="userSpaceOnUse">
+    <path d="M28 0H0v28" fill="none" stroke="#dce8ff" stroke-width="1"/>
+  </pattern>
+</defs>
+<style>
+  .bg{fill:#f7fbff}.grid{fill:url(#grid)}.ink{fill:#111827}.muted{fill:#68758a}.panel{fill:#fff;stroke:#111827;stroke-width:3}.blue{fill:#2767ff}.cyan{fill:#19c9e8}.navy{fill:#111827}.line{stroke:#111827;stroke-width:4;stroke-linecap:round;stroke-linejoin:round}.thin{stroke:#91a3c4;stroke-width:2;stroke-linecap:round}.loop{stroke:#2767ff;stroke-width:5;stroke-linecap:round;stroke-dasharray:12 13;fill:none}.title{font:900 42px Arial,sans-serif;fill:#111827}.label{font:800 15px Arial,sans-serif;fill:#111827}.small{font:14px Arial,sans-serif;fill:#68758a}.mono{font:700 13px monospace;fill:#111827}.rev{fill:#f7fbff}
+</style>
+<rect class="bg" width="900" height="360"/>
+<rect class="grid" width="900" height="360" opacity=".9"/>
+<text x="44" y="72" class="title">localhost</text>
+<text x="48" y="96" class="small">repo -> agent -> preview</text>
+<rect x="46" y="124" width="194" height="174" rx="14" class="panel"/>
+<rect x="46" y="124" width="194" height="36" rx="14" class="navy"/>
+<circle cx="72" cy="142" r="6" class="cyan"/><circle cx="94" cy="142" r="6" class="blue"/><circle cx="116" cy="142" r="6" fill="#ffcf5a"/>
+<text x="72" y="191" class="mono">/src</text>
+<path d="M72 212h92M72 237h62M72 262h108" class="thin"/>
+<rect x="282" y="84" width="150" height="150" rx="28" fill="#111827"/>
+<path d="M326 132h62M326 158h42M326 184h76" stroke="#f7fbff" stroke-width="7" stroke-linecap="round"/>
+<path d="M396 158h16M396 184h16" stroke="#19c9e8" stroke-width="7" stroke-linecap="round"/>
+<text x="315" y="260" class="label">AGENT</text>
+<path d="M239 176C258 126 286 104 328 96" class="loop"/>
+<path d="M333 96l-32-15 9 36" fill="none" stroke="#2767ff" stroke-width="5" stroke-linecap="round" stroke-linejoin="round"/>
+<path d="M418 238C370 312 242 318 188 292" class="loop"/>
+<path d="M188 292l36 3-23-30" fill="none" stroke="#2767ff" stroke-width="5" stroke-linecap="round" stroke-linejoin="round"/>
+<rect x="500" y="62" width="346" height="236" rx="22" class="panel"/>
+<rect x="524" y="88" width="298" height="36" rx="18" fill="#eef5ff" stroke="#111827" stroke-width="3"/>
+<text x="550" y="111" class="mono">127.0.0.1:5174</text>
+<rect x="528" y="150" width="126" height="88" rx="10" class="blue"/>
+<path d="M684 154h90M684 182h112M684 210h62" class="line"/>
+<rect x="532" y="258" width="82" height="28" rx="14" class="navy"/><text x="553" y="277" class="mono rev">HTML</text>
+<rect x="626" y="258" width="72" height="28" rx="14" fill="#fff" stroke="#111827" stroke-width="3"/><text x="646" y="277" class="mono">CSS</text>
+<circle cx="804" cy="258" r="18" class="cyan"/>
+<path d="M805 196v44M785 222h40" class="line"/>
+</svg>

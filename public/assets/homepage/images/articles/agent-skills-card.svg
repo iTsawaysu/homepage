@@ -1,0 +1,12 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 360" role="img" aria-labelledby="title desc">
+<title id="title">Skill Anatomy</title>
+<desc id="desc">trigger steps checks evidence</desc>
+<style>
+  .bg{fill:#fffaf0}.ink{fill:#20242c}.muted{fill:#5e6673}.line{stroke:#20242c;stroke-width:4;stroke-linecap:round;stroke-linejoin:round}.thin{stroke:#20242c;stroke-width:2;stroke-linecap:round}.accent{fill:#3949ab}.accent-line{stroke:#3949ab;stroke-width:5;stroke-linecap:round;stroke-linejoin:round}.title{font:700 34px Arial,sans-serif;fill:#20242c}.label{font:700 16px Arial,sans-serif;fill:#20242c}.small{font:14px Arial,sans-serif;fill:#5e6673}.mono{font:700 13px monospace;fill:#20242c}
+</style>
+<rect class="bg" width="900" height="360"/>
+<path d="M0 310H900M0 250H900M0 190H900M0 130H900M0 70H900M110 0V360M230 0V360M350 0V360M470 0V360M590 0V360M710 0V360M830 0V360" stroke="#e6decf" stroke-width="1" opacity=".7"/>
+<text x="48" y="62" class="title">Skill Anatomy</text>
+<text x="50" y="326" class="small">trigger steps checks evidence</text>
+<rect x="120" y="96" width="300" height="186" rx="18" fill="#fff" stroke="#20242c" stroke-width="3"/><rect x="120" y="96" width="300" height="44" rx="18" fill="#3949ab"/><text x="146" y="124" class="mono" fill="#fff">SKILL.md</text><rect x="146" y="158" width="220" height="22" rx="6" fill="#f5f7fb" stroke="#20242c" stroke-width="3"/><circle cx="384" cy="169" r="8" fill="#3949ab"/><text x="158" y="174" text-anchor="start" class="small">trigger</text><rect x="146" y="189" width="220" height="22" rx="6" fill="#fff" stroke="#20242c" stroke-width="3"/><circle cx="384" cy="200" r="8" fill="#3949ab"/><text x="158" y="205" text-anchor="start" class="small">read context</text><rect x="146" y="220" width="220" height="22" rx="6" fill="#f5f7fb" stroke="#20242c" stroke-width="3"/><circle cx="384" cy="231" r="8" fill="#3949ab"/><text x="158" y="236" text-anchor="start" class="small">steps</text><rect x="146" y="251" width="220" height="22" rx="6" fill="#fff" stroke="#20242c" stroke-width="3"/><circle cx="384" cy="262" r="8" fill="#3949ab"/><text x="158" y="267" text-anchor="start" class="small">evidence</text><rect x="496" y="116" width="250" height="138" rx="22" fill="#f5f7fb" stroke="#20242c" stroke-width="3"/><path d="M540 156h162M540 194h112" class="accent-line"/><circle cx="706" cy="156" r="15" fill="#20242c"/><circle cx="658" cy="194" r="15" fill="#20242c"/>
+</svg>

@@ -1,0 +1,32 @@
+{
+  "title": "前端设计系统小型化实践",
+  "category": "design",
+  "tldr": "为个人项目和小型工具建立一套克制的设计系统：少量 token、少量组件、明确状态，既保持高级感，也不把项目拖进大型组件库的复杂度。",
+  "role": "设计系统规划 / 前端开发",
+  "challenges": [
+    "小项目最容易在按钮、卡片、表单、颜色和间距上反复做局部决定。单看每一处都合理，放在一起却会慢慢失控。",
+    "完整设计系统又太重。文档、组件库和规则一旦超过项目体量，规范本身就会变成新的维护成本。"
+  ],
+  "solutions": [
+    "只保留最关键的设计变量：颜色、字号、间距、圆角、边框、阴影和动效节奏。组件也只覆盖高频交互，先让系统服务产品，而不是反过来。",
+    "每个组件必须有默认、悬停、禁用、加载、错误和长文本状态。页面交付前再用一份轻量清单检查信息层级、触控密度、可访问性和移动端可读性。"
+  ],
+  "technology": [
+    "CSS Custom Properties",
+    "Component Contracts",
+    "Astro",
+    "Accessibility Checks"
+  ],
+  "images": {
+    "large": {
+      "url": "/assets/homepage/images/design-system-minimal.svg",
+      "padding": 62
+    },
+    "small": "/assets/homepage/images/design-thumb-astro-system.svg"
+  },
+  "url": {
+    "live": null,
+    "local": "/#/case-study/small-design-system"
+  },
+  "order": 5
+}

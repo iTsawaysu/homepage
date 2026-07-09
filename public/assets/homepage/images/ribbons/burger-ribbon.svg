@@ -1,0 +1,9 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 120" role="img" aria-labelledby="title">
+  <title id="title">汉堡不拆包专家</title>
+  <rect x="12" y="16" width="96" height="88" fill="#f4f4f6" stroke="#2b2c33" stroke-width="6"/>
+  <path d="M30 54c4-18 20-28 33-28s27 10 31 28z" fill="#d6934a" stroke="#2b2c33" stroke-width="5"/>
+  <path d="M27 57h66v15H27z" fill="#5b8f35" stroke="#2b2c33" stroke-width="4"/>
+  <path d="M31 72h58v14H31z" fill="#7a3f23" stroke="#2b2c33" stroke-width="4"/>
+  <path d="M28 86h64v10H28z" fill="#d6934a" stroke="#2b2c33" stroke-width="4"/>
+  <text x="60" y="47" fill="#fff" font-family="Arial Black, sans-serif" font-size="13" text-anchor="middle">BURGER</text>
+</svg>

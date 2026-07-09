@@ -1,0 +1,11 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 120" role="img" aria-labelledby="title">
+  <title id="title">KFC V 我 50 终身成就奖</title>
+  <rect x="19" y="8" width="82" height="104" fill="#e4002b"/>
+  <rect x="28" y="8" width="14" height="104" fill="#fff"/>
+  <rect x="78" y="8" width="14" height="104" fill="#fff"/>
+  <rect x="13" y="19" width="94" height="82" fill="#fff" stroke="#2b2c33" stroke-width="6"/>
+  <circle cx="60" cy="60" r="36" fill="#2b2c33"/>
+  <text x="60" y="45" fill="#fff" font-family="Arial Black, Impact, sans-serif" font-size="17" text-anchor="middle">V 我</text>
+  <text x="60" y="73" fill="#fff" font-family="Arial Black, Impact, sans-serif" font-size="30" text-anchor="middle">50</text>
+  <text x="60" y="91" fill="#fff" font-family="Arial, sans-serif" font-size="9" font-weight="700" text-anchor="middle">终身成就</text>
+</svg>

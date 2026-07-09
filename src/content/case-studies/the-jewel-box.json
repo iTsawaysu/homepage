@@ -1,0 +1,32 @@
+{
+  "title": "从设计稿到前端组件",
+  "category": "design",
+  "tldr": "一次把视觉稿拆成可维护前端组件的复盘：不只是搬像素，而是把布局、状态、间距、动效和响应式规则变成代码里的约束。",
+  "role": "前端开发 / 交互落地",
+  "challenges": [
+    "设计稿通常只展示理想静态态，但真实页面会遇到加载、空数据、错误提示、超长标题、多语言和移动端压缩。",
+    "如果组件边界拆得太随意，后续每次改版都会变成样式覆盖和特殊分支，视觉看似还原，代码却越来越难维护。"
+  ],
+  "solutions": [
+    "先从页面语义里提炼稳定结构，再拆出可复用组件、状态和插槽。视觉细节不直接散落在页面里，而是沉淀成字号、间距、边框和交互动效的规则。",
+    "实现后用真实内容和多尺寸截图回看，而不是只对照一张桌面设计稿。能撑住异常状态的组件，才算真正完成交付。"
+  ],
+  "technology": [
+    "HTML / CSS",
+    "TypeScript",
+    "Design Tokens",
+    "Playwright"
+  ],
+  "images": {
+    "large": {
+      "url": "/assets/homepage/images/design-component-handoff.svg",
+      "padding": 62
+    },
+    "small": "/assets/homepage/images/design-thumb-typescript-playwright.svg"
+  },
+  "url": {
+    "live": null,
+    "local": "/#/case-study/design-to-frontend-components"
+  },
+  "order": 4
+}

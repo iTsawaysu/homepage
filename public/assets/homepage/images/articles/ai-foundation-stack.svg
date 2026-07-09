@@ -1,0 +1,12 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 360" role="img" aria-labelledby="title desc">
+<title id="title">AI Stack</title>
+<desc id="desc">model context tools validation memory</desc>
+<style>
+  .bg{fill:#fffaf0}.ink{fill:#20242c}.muted{fill:#5e6673}.line{stroke:#20242c;stroke-width:4;stroke-linecap:round;stroke-linejoin:round}.thin{stroke:#20242c;stroke-width:2;stroke-linecap:round}.accent{fill:#7b61ff}.accent-line{stroke:#7b61ff;stroke-width:5;stroke-linecap:round;stroke-linejoin:round}.title{font:700 34px Arial,sans-serif;fill:#20242c}.label{font:700 16px Arial,sans-serif;fill:#20242c}.small{font:14px Arial,sans-serif;fill:#5e6673}.mono{font:700 13px monospace;fill:#20242c}
+</style>
+<rect class="bg" width="900" height="360"/>
+<path d="M0 310H900M0 250H900M0 190H900M0 130H900M0 70H900M110 0V360M230 0V360M350 0V360M470 0V360M590 0V360M710 0V360M830 0V360" stroke="#e6decf" stroke-width="1" opacity=".7"/>
+<text x="48" y="62" class="title">AI Stack</text>
+<text x="50" y="326" class="small">model context tools validation memory</text>
+<rect x="255" y="218" width="380" height="56" rx="14" fill="#20242c" stroke="#20242c" stroke-width="3"/><text x="450" y="254" text-anchor="middle" class="label">Verify</text><rect x="273" y="184" width="344" height="56" rx="14" fill="#fff" stroke="#20242c" stroke-width="3"/><text x="450" y="220" text-anchor="middle" class="label">Tools</text><rect x="291" y="150" width="308" height="56" rx="14" fill="#f5f7fb" stroke="#20242c" stroke-width="3"/><text x="450" y="186" text-anchor="middle" class="label">Context</text><rect x="309" y="116" width="272" height="56" rx="14" fill="#fff" stroke="#20242c" stroke-width="3"/><text x="450" y="152" text-anchor="middle" class="label">Model</text><rect x="327" y="82" width="236" height="56" rx="14" fill="#f5f7fb" stroke="#20242c" stroke-width="3"/><text x="450" y="118" text-anchor="middle" class="label">Need</text><path d="M168 250V126h130" class="accent-line"/><circle cx="168" cy="250" r="17" fill="#7b61ff"/><circle cx="298" cy="126" r="17" fill="#7b61ff"/>
+</svg>

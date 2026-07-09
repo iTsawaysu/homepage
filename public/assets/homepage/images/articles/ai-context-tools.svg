@@ -1,0 +1,12 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 360" role="img" aria-labelledby="title desc">
+<title id="title">Context And Tools</title>
+<desc id="desc">ground model before action</desc>
+<style>
+  .bg{fill:#fffaf0}.ink{fill:#20242c}.muted{fill:#5e6673}.line{stroke:#20242c;stroke-width:4;stroke-linecap:round;stroke-linejoin:round}.thin{stroke:#20242c;stroke-width:2;stroke-linecap:round}.accent{fill:#00897b}.accent-line{stroke:#00897b;stroke-width:5;stroke-linecap:round;stroke-linejoin:round}.title{font:700 34px Arial,sans-serif;fill:#20242c}.label{font:700 16px Arial,sans-serif;fill:#20242c}.small{font:14px Arial,sans-serif;fill:#5e6673}.mono{font:700 13px monospace;fill:#20242c}
+</style>
+<rect class="bg" width="900" height="360"/>
+<path d="M0 310H900M0 250H900M0 190H900M0 130H900M0 70H900M110 0V360M230 0V360M350 0V360M470 0V360M590 0V360M710 0V360M830 0V360" stroke="#e6decf" stroke-width="1" opacity=".7"/>
+<text x="48" y="62" class="title">Context And Tools</text>
+<text x="50" y="326" class="small">ground model before action</text>
+<circle cx="450" cy="176" r="54" fill="#00897b"/><text x="450" y="183" text-anchor="middle" class="label" fill="#fff">AI</text><path d="M450 176L220 142" class="thin"/><circle cx="220" cy="142" r="38" fill="#fff" stroke="#20242c" stroke-width="3"/><text x="220" y="147" text-anchor="middle" class="label">Docs</text><path d="M450 176L330 242" class="thin"/><circle cx="330" cy="242" r="38" fill="#fff" stroke="#20242c" stroke-width="3"/><text x="330" y="247" text-anchor="middle" class="label">Files</text><path d="M450 176L570 242" class="thin"/><circle cx="570" cy="242" r="38" fill="#fff" stroke="#20242c" stroke-width="3"/><text x="570" y="247" text-anchor="middle" class="label">API</text><path d="M450 176L680 142" class="thin"/><circle cx="680" cy="142" r="38" fill="#fff" stroke="#20242c" stroke-width="3"/><text x="680" y="147" text-anchor="middle" class="label">Tests</text><path d="M397 258c62 34 132 31 190-8" fill="none" class="accent-line"/><path d="M579 238l18 6-11 16" fill="none" class="accent-line"/>
+</svg>

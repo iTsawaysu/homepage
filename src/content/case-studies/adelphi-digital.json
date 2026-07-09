@@ -1,0 +1,33 @@
+{
+  "title": "Kaku",
+  "category": "coding",
+  "tldr": "一个为 AI coding 场景打磨的快速终端。它基于 WezTerm 深度定制，保留 Lua 配置兼容性，同时提供开箱即用的字体、主题、面板、AI 助手和命令工作流。",
+  "role": "开发者工具体验分析 / 终端工作流整理",
+  "challenges": [
+    "AI 辅助编码把终端从命令入口变成了协作界面。普通终端往往还需要用户手动调字体、主题、面板、快捷键和 shell 插件，进入工作状态前有不少摩擦。",
+    "性能和可定制性也不能牺牲。一个为 AI coding 准备的终端，既要启动快、默认好用，也要允许高级用户继续用熟悉的 Lua 配置深度定制。"
+  ],
+  "solutions": [
+    "Kaku 把 WezTerm 的可配置能力和更实用的默认体验结合起来：JetBrains Mono、macOS 主题感知、复制选择、路径点击、窗格广播、视觉提醒等细节都预先调好。",
+    "它内置 AI assistant：命令失败时可以给出修复建议，也可以把自然语言转换成待确认命令。再配合 lazy loading、裁剪后的资源和更小的二进制体积，把终端做成更接近 AI 编码工作台的入口。"
+  ],
+  "technology": [
+    "Rust",
+    "Lua",
+    "WezTerm-compatible Config",
+    "macOS",
+    "AI Assistant"
+  ],
+  "images": {
+    "large": {
+      "url": "/assets/homepage/images/coding-kaku.svg",
+      "padding": 56.25
+    },
+    "small": "/assets/homepage/images/coding-kaku.svg"
+  },
+  "url": {
+    "live": "https://github.com/tw93/Kaku",
+    "local": "/#/case-study/kaku"
+  },
+  "order": 2
+}

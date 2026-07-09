@@ -1,0 +1,19 @@
+{
+  "lang": "en",
+  "name": "iTsawaysu",
+  "short_name": "iTsawaysu",
+  "description": "I'm Jianda Sun，主要写 Java 后端；平时跟 Spring、数据库、接口和日志打交道，偶尔也会被配置文件教育一下，重启好了就当是自己修的；最近也没少 Vibe Coding，简单说就是我和 AI 一起写代码，它负责自信地生成，我负责半信半疑地改到能跑。",
+  "start_url": "/",
+  "display": "standalone",
+  "orientation": "portrait",
+  "background_color": "#ffffff",
+  "theme_color": "#2b2c33",
+  "icons": [
+    {
+      "src": "/assets/homepage/images/favicon/android-icon-192x192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "density": "4.0"
+    }
+  ]
+}

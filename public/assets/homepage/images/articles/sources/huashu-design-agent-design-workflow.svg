@@ -1,0 +1,32 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 360" role="img" aria-labelledby="title desc">
+<title id="title">Huashu Design Workflow</title>
+<desc id="desc">A motion delivery stage turning one prompt into storyboard frames and export assets</desc>
+<style>
+  .bg{fill:#12131c}.cream{fill:#fff3d2}.ink{fill:#12131c}.pink{fill:#ff3b8f}.yellow{fill:#ffc83d}.cyan{fill:#23d7ff}.line{stroke:#fff3d2;stroke-width:4;stroke-linecap:round;stroke-linejoin:round}.dark-line{stroke:#12131c;stroke-width:4;stroke-linecap:round;stroke-linejoin:round}.thin{stroke:#fff3d2;stroke-width:2;stroke-linecap:round;opacity:.55}.title{font:900 30px Arial,sans-serif;fill:#fff3d2}.small{font:14px Arial,sans-serif;fill:#c6c4d8}.mono{font:700 13px monospace;fill:#fff3d2}.dark-text{font:800 13px monospace;fill:#12131c}
+</style>
+<rect class="bg" width="900" height="360"/>
+<path d="M-40 274C112 218 234 260 360 202S612 80 940 154" fill="none" stroke="#2a2c3d" stroke-width="78"/>
+<path d="M0 306h900" stroke="#fff3d2" stroke-width="4"/>
+<text x="56" y="62" class="title">one brief / four deliverables</text>
+<g transform="rotate(-11 440 156)">
+  <rect x="126" y="106" width="610" height="108" rx="20" class="cream"/>
+  <path d="M154 128h548M154 195h548" class="dark-line"/>
+  <rect x="174" y="140" width="82" height="42" rx="8" class="pink"/>
+  <rect x="282" y="140" width="82" height="42" rx="8" class="yellow"/>
+  <rect x="390" y="140" width="82" height="42" rx="8" class="cyan"/>
+  <rect x="498" y="140" width="82" height="42" rx="8" fill="#12131c"/>
+  <rect x="606" y="140" width="74" height="42" rx="8" fill="#e2d8b7"/>
+</g>
+<rect x="66" y="106" width="182" height="168" rx="26" fill="#202235" stroke="#fff3d2" stroke-width="3"/>
+<text x="96" y="146" class="mono">prompt card</text>
+<path d="M98 181h104M98 210h68M98 239h120" class="thin"/>
+<circle cx="218" cy="238" r="13" class="cyan"/>
+<circle cx="698" cy="162" r="76" class="pink"/>
+<circle cx="698" cy="162" r="50" fill="#12131c" stroke="#fff3d2" stroke-width="4"/>
+<path d="M683 134l48 28-48 28z" class="yellow"/>
+<path d="M334 286h360" class="line"/>
+<path d="M354 286v-26M446 286v-50M538 286v-32M630 286v-78" stroke="#23d7ff" stroke-width="7" stroke-linecap="round"/>
+<rect x="746" y="262" width="76" height="42" rx="12" class="cream"/>
+<text x="770" y="288" class="dark-text">MP4</text>
+<text x="56" y="330" class="small">directions, prototype, animation, export</text>
+</svg>

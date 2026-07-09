@@ -1,0 +1,12 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 360" role="img" aria-labelledby="title desc">
+<title id="title">Long Term Feedback</title>
+<desc id="desc">verification writes project memory</desc>
+<style>
+  .bg{fill:#fffaf0}.ink{fill:#20242c}.muted{fill:#5e6673}.line{stroke:#20242c;stroke-width:4;stroke-linecap:round;stroke-linejoin:round}.thin{stroke:#20242c;stroke-width:2;stroke-linecap:round}.accent{fill:#455a64}.accent-line{stroke:#455a64;stroke-width:5;stroke-linecap:round;stroke-linejoin:round}.title{font:700 34px Arial,sans-serif;fill:#20242c}.label{font:700 16px Arial,sans-serif;fill:#20242c}.small{font:14px Arial,sans-serif;fill:#5e6673}.mono{font:700 13px monospace;fill:#20242c}
+</style>
+<rect class="bg" width="900" height="360"/>
+<path d="M0 310H900M0 250H900M0 190H900M0 130H900M0 70H900M110 0V360M230 0V360M350 0V360M470 0V360M590 0V360M710 0V360M830 0V360" stroke="#e6decf" stroke-width="1" opacity=".7"/>
+<text x="48" y="62" class="title">Long Term Feedback</text>
+<text x="50" y="326" class="small">verification writes project memory</text>
+<circle cx="450" cy="184" r="92" fill="#fff" stroke="#20242c" stroke-width="4"/><path d="M450 92a92 92 0 0 1 90 74" fill="none" class="accent-line"/><path d="M532 154l12 22 15-19" fill="none" class="accent-line"/><path d="M450 276a92 92 0 0 1-90-74" fill="none" class="accent-line"/><path d="M368 214l-12-22-15 19" fill="none" class="accent-line"/><circle cx="450" cy="118" r="28" fill="#fff" stroke="#20242c" stroke-width="3"/><text x="450" y="123" text-anchor="middle" class="small">Change</text><circle cx="526" cy="184" r="28" fill="#f5f7fb" stroke="#20242c" stroke-width="3"/><text x="526" y="189" text-anchor="middle" class="small">Verify</text><circle cx="450" cy="250" r="28" fill="#fff" stroke="#20242c" stroke-width="3"/><text x="450" y="255" text-anchor="middle" class="small">Record</text><circle cx="374" cy="184" r="28" fill="#f5f7fb" stroke="#20242c" stroke-width="3"/><text x="374" y="189" text-anchor="middle" class="small">Recall</text><text x="450" y="188" text-anchor="middle" class="label">Improve</text>
+</svg>

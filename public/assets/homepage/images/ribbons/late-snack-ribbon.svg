@@ -1,0 +1,10 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 120" role="img" aria-labelledby="title">
+  <title id="title">夜宵点单 MVP</title>
+  <rect x="12" y="14" width="96" height="92" fill="#2b2c33"/>
+  <circle cx="76" cy="38" r="19" fill="#ffd36e"/>
+  <circle cx="84" cy="31" r="19" fill="#2b2c33"/>
+  <path d="M26 78h68v20H26z" fill="#fff"/>
+  <path d="M31 50h58l-8 28H39z" fill="#e4002b" stroke="#fff" stroke-width="4" stroke-linejoin="round"/>
+  <text x="60" y="67" fill="#fff" font-family="Arial Black, sans-serif" font-size="15" text-anchor="middle">MVP</text>
+  <text x="60" y="93" fill="#2b2c33" font-family="Arial Black, sans-serif" font-size="13" text-anchor="middle">夜宵</text>
+</svg>

@@ -1,0 +1,12 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 360" role="img" aria-labelledby="title desc">
+<title id="title">Agent Lifecycle</title>
+<desc id="desc">define plan build verify ship</desc>
+<style>
+  .bg{fill:#fffaf0}.ink{fill:#20242c}.muted{fill:#5e6673}.line{stroke:#20242c;stroke-width:4;stroke-linecap:round;stroke-linejoin:round}.thin{stroke:#20242c;stroke-width:2;stroke-linecap:round}.accent{fill:#1565c0}.accent-line{stroke:#1565c0;stroke-width:5;stroke-linecap:round;stroke-linejoin:round}.title{font:700 34px Arial,sans-serif;fill:#20242c}.label{font:700 16px Arial,sans-serif;fill:#20242c}.small{font:14px Arial,sans-serif;fill:#5e6673}.mono{font:700 13px monospace;fill:#20242c}
+</style>
+<rect class="bg" width="900" height="360"/>
+<path d="M0 310H900M0 250H900M0 190H900M0 130H900M0 70H900M110 0V360M230 0V360M350 0V360M470 0V360M590 0V360M710 0V360M830 0V360" stroke="#e6decf" stroke-width="1" opacity=".7"/>
+<text x="48" y="62" class="title">Agent Lifecycle</text>
+<text x="50" y="326" class="small">define plan build verify ship</text>
+<path d="M104 190h690" class="line"/><path d="M104 190h690" stroke="#1565c0" stroke-width="8" stroke-linecap="round" opacity=".18"/><circle cx="126" cy="190" r="22" fill="#1565c0"/><path d="M126 214v42" class="thin"/><text x="126" y="282" text-anchor="middle" class="small">define</text><circle cx="258" cy="190" r="22" fill="#1565c0"/><path d="M258 214v42" class="thin"/><text x="258" y="282" text-anchor="middle" class="small">plan</text><circle cx="390" cy="190" r="22" fill="#1565c0"/><path d="M390 214v42" class="thin"/><text x="390" y="282" text-anchor="middle" class="small">build</text><circle cx="522" cy="190" r="22" fill="#1565c0"/><path d="M522 214v42" class="thin"/><text x="522" y="282" text-anchor="middle" class="small">verify</text><circle cx="654" cy="190" r="22" fill="#1565c0"/><path d="M654 214v42" class="thin"/><text x="654" y="282" text-anchor="middle" class="small">ship</text>
+</svg>

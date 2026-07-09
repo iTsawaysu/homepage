@@ -1,0 +1,12 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 360" role="img" aria-labelledby="title desc">
+<title id="title">Taste Layout</title>
+<desc id="desc">scene layout type motion polish</desc>
+<style>
+  .bg{fill:#fffaf0}.ink{fill:#20242c}.muted{fill:#5e6673}.line{stroke:#20242c;stroke-width:4;stroke-linecap:round;stroke-linejoin:round}.thin{stroke:#20242c;stroke-width:2;stroke-linecap:round}.accent{fill:#8e24aa}.accent-line{stroke:#8e24aa;stroke-width:5;stroke-linecap:round;stroke-linejoin:round}.title{font:700 34px Arial,sans-serif;fill:#20242c}.label{font:700 16px Arial,sans-serif;fill:#20242c}.small{font:14px Arial,sans-serif;fill:#5e6673}.mono{font:700 13px monospace;fill:#20242c}
+</style>
+<rect class="bg" width="900" height="360"/>
+<path d="M0 310H900M0 250H900M0 190H900M0 130H900M0 70H900M110 0V360M230 0V360M350 0V360M470 0V360M590 0V360M710 0V360M830 0V360" stroke="#e6decf" stroke-width="1" opacity=".7"/>
+<text x="48" y="62" class="title">Taste Layout</text>
+<text x="50" y="326" class="small">scene layout type motion polish</text>
+<rect x="108" y="96" width="684" height="190" rx="20" fill="#fff" stroke="#20242c" stroke-width="3"/><rect x="136" y="124" width="280" height="130" rx="8" fill="#20242c"/><rect x="444" y="124" width="128" height="54" rx="8" fill="#8e24aa"/><rect x="590" y="124" width="160" height="54" rx="8" fill="#f5f7fb" stroke="#20242c" stroke-width="3"/><rect x="444" y="196" width="306" height="58" rx="8" fill="#fff" stroke="#20242c" stroke-width="3"/><path d="M164 220h112M164 194h180M164 168h140" stroke="#fff" stroke-width="7" stroke-linecap="round"/><text x="510" y="274" text-anchor="middle" class="small">scene</text><text x="576" y="274" text-anchor="middle" class="small">type</text><text x="642" y="274" text-anchor="middle" class="small">motion</text>
+</svg>

@@ -1,0 +1,8 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 120" role="img" aria-labelledby="title">
+  <title id="title">薯条续杯冠军</title>
+  <rect x="14" y="10" width="92" height="100" fill="#fff" stroke="#2b2c33" stroke-width="6"/>
+  <path d="M37 30l5 45M51 24l1 51M65 24l-2 51M79 30l-6 45" stroke="#ffcc33" stroke-width="10" stroke-linecap="round"/>
+  <path d="M34 58h52l-8 42H42z" fill="#e4002b" stroke="#2b2c33" stroke-width="5" stroke-linejoin="round"/>
+  <text x="60" y="84" fill="#fff" font-family="Arial Black, sans-serif" font-size="16" text-anchor="middle">薯条</text>
+  <text x="60" y="100" fill="#fff" font-family="Arial, sans-serif" font-size="10" font-weight="700" text-anchor="middle">续杯冠军</text>
+</svg>

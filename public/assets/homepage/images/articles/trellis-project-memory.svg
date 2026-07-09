@@ -1,0 +1,12 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 360" role="img" aria-labelledby="title desc">
+<title id="title">Project Memory</title>
+<desc id="desc">specs tasks workspace context</desc>
+<style>
+  .bg{fill:#fffaf0}.ink{fill:#20242c}.muted{fill:#5e6673}.line{stroke:#20242c;stroke-width:4;stroke-linecap:round;stroke-linejoin:round}.thin{stroke:#20242c;stroke-width:2;stroke-linecap:round}.accent{fill:#00695c}.accent-line{stroke:#00695c;stroke-width:5;stroke-linecap:round;stroke-linejoin:round}.title{font:700 34px Arial,sans-serif;fill:#20242c}.label{font:700 16px Arial,sans-serif;fill:#20242c}.small{font:14px Arial,sans-serif;fill:#5e6673}.mono{font:700 13px monospace;fill:#20242c}
+</style>
+<rect class="bg" width="900" height="360"/>
+<path d="M0 310H900M0 250H900M0 190H900M0 130H900M0 70H900M110 0V360M230 0V360M350 0V360M470 0V360M590 0V360M710 0V360M830 0V360" stroke="#e6decf" stroke-width="1" opacity=".7"/>
+<text x="48" y="62" class="title">Project Memory</text>
+<text x="50" y="326" class="small">specs tasks workspace context</text>
+<rect x="120" y="112" width="660" height="146" rx="18" fill="#fff" stroke="#20242c" stroke-width="3"/><path d="M168 226c80-92 154-92 232 0s154 92 232 0" fill="none" class="accent-line"/><rect x="166" y="128" width="96" height="46" rx="10" fill="#fff" stroke="#20242c" stroke-width="3"/><path d="M178 188h72" class="thin"/><text x="214" y="158" text-anchor="middle" class="small">specs</text><rect x="300" y="128" width="96" height="46" rx="10" fill="#f5f7fb" stroke="#20242c" stroke-width="3"/><path d="M312 188h72" class="thin"/><text x="348" y="158" text-anchor="middle" class="small">tasks</text><rect x="434" y="128" width="96" height="46" rx="10" fill="#fff" stroke="#20242c" stroke-width="3"/><path d="M446 188h72" class="thin"/><text x="482" y="158" text-anchor="middle" class="small">code</text><rect x="568" y="128" width="96" height="46" rx="10" fill="#f5f7fb" stroke="#20242c" stroke-width="3"/><path d="M580 188h72" class="thin"/><text x="616" y="158" text-anchor="middle" class="small">journal</text><rect x="702" y="128" width="96" height="46" rx="10" fill="#fff" stroke="#20242c" stroke-width="3"/><path d="M714 188h72" class="thin"/><text x="750" y="158" text-anchor="middle" class="small">next</text>
+</svg>

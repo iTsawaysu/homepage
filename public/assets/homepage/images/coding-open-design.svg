@@ -1,0 +1,46 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1600 900" role="img" aria-labelledby="title desc">
+  <title id="title">Open Design coding project cover</title>
+  <desc id="desc">A colorful local-first design studio with agent panels, artifacts, and export surfaces.</desc>
+  <defs>
+    <pattern id="dots" width="36" height="36" patternUnits="userSpaceOnUse">
+      <circle cx="4" cy="4" r="2" fill="#e4e0ff"/>
+    </pattern>
+    <filter id="shadow" x="-20%" y="-20%" width="140%" height="140%">
+      <feDropShadow dx="0" dy="22" stdDeviation="24" flood-color="#1e1b4b" flood-opacity=".2"/>
+    </filter>
+  </defs>
+  <rect width="1600" height="900" fill="#fbf8f1"/>
+  <rect width="1600" height="900" fill="url(#dots)" opacity=".85"/>
+  <path d="M0 0h1600v188H0z" fill="#201334"/>
+  <path d="M0 188h360v712H0z" fill="#ff6b4a"/>
+  <path d="M1110 0h490v900h-348l-186-438z" fill="#7c3aed"/>
+  <path d="M1014 0h220l-164 900H850z" fill="#06b6d4"/>
+  <text x="118" y="122" font-family="Helvetica, Arial, sans-serif" font-size="44" font-weight="700" letter-spacing="5" fill="#fffdf8">LOCAL DESIGN STUDIO</text>
+  <rect x="132" y="244" width="520" height="386" fill="#fffdf8" stroke="#201334" stroke-width="9" filter="url(#shadow)"/>
+  <rect x="132" y="244" width="520" height="72" fill="#201334"/>
+  <circle cx="182" cy="280" r="11" fill="#fffdf8"/>
+  <circle cx="222" cy="280" r="11" fill="#fffdf8"/>
+  <circle cx="262" cy="280" r="11" fill="#fffdf8"/>
+  <rect x="182" y="370" width="174" height="132" fill="#7c3aed"/>
+  <rect x="386" y="370" width="180" height="24" fill="#201334"/>
+  <rect x="386" y="426" width="206" height="14" fill="#201334" opacity=".66"/>
+  <rect x="386" y="464" width="150" height="14" fill="#201334" opacity=".66"/>
+  <rect x="182" y="540" width="412" height="44" fill="#201334"/>
+  <g transform="translate(760 248)" filter="url(#shadow)">
+    <rect width="348" height="230" fill="#fffdf8" stroke="#201334" stroke-width="8"/>
+    <rect x="34" y="34" width="134" height="88" fill="#06b6d4"/>
+    <rect x="198" y="40" width="98" height="16" fill="#201334"/>
+    <rect x="198" y="84" width="118" height="12" fill="#201334" opacity=".62"/>
+    <rect x="198" y="120" width="82" height="12" fill="#201334" opacity=".62"/>
+    <rect x="34" y="164" width="282" height="24" fill="#ff6b4a"/>
+  </g>
+  <g transform="translate(910 552)" filter="url(#shadow)">
+    <rect width="360" height="160" fill="#201334"/>
+    <text x="34" y="70" font-family="Helvetica, Arial, sans-serif" font-size="34" font-weight="700" fill="#fffdf8">HTML</text>
+    <text x="180" y="70" font-family="Helvetica, Arial, sans-serif" font-size="34" font-weight="700" fill="#fffdf8">PDF</text>
+    <rect x="34" y="102" width="98" height="12" fill="#06b6d4"/>
+    <rect x="180" y="102" width="98" height="12" fill="#ff6b4a"/>
+  </g>
+  <path d="M652 438h108" stroke="#201334" stroke-width="8" stroke-dasharray="16 16"/>
+  <circle cx="720" cy="438" r="14" fill="#ff6b4a"/>
+</svg>

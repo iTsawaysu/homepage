@@ -1,0 +1,33 @@
+{
+  "title": "CC Switch",
+  "category": "coding",
+  "tldr": "一个跨平台 AI 编程工具管理器，把 Claude Code、Codex、Gemini CLI、OpenCode、OpenClaw、Hermes 等工具的 provider、MCP 和 Skills 管理收拢到同一个桌面应用里。",
+  "role": "桌面应用体验分析 / 技术整理",
+  "challenges": [
+    "AI coding 工具越来越多，但每个工具都有自己的配置格式。切换 API provider、维护 MCP、同步 Skills 时，很容易在 JSON、TOML、环境变量和桌面工具之间来回跳。",
+    "这类配置改错后的代价很高。用户需要的是能快速切换、能回滚、能跨工具同步，同时又不破坏本地配置的工作台。"
+  ],
+  "solutions": [
+    "CC Switch 用一个 Tauri 桌面应用承接多工具管理：provider 可视化导入和切换、50+ 预设、系统托盘快速切换，以及跨 Claude、Codex、Gemini、OpenCode 等工具的 MCP / Skills 同步。",
+    "底层用 SQLite 和原子写入保护配置，再用本地 proxy、热切换、failover 和健康检查降低 provider 迁移成本。它解决的不是单点功能，而是 AI 编程工作流里最容易被忽略的配置可靠性。"
+  ],
+  "technology": [
+    "Rust",
+    "Tauri 2",
+    "TypeScript",
+    "SQLite",
+    "MCP / Skills"
+  ],
+  "images": {
+    "large": {
+      "url": "/assets/homepage/images/coding-cc-switch.svg",
+      "padding": 56.25
+    },
+    "small": "/assets/homepage/images/coding-cc-switch.svg"
+  },
+  "url": {
+    "live": "https://github.com/farion1231/cc-switch",
+    "local": "/#/case-study/cc-switch"
+  },
+  "order": 0
+}

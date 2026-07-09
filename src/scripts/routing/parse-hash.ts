@@ -1,0 +1,15 @@
+export {
+  DEFAULT_HASH_ROUTE,
+  ERROR_ROUTE_NAME,
+  LEGACY_PATHJS_ROUTE_PATTERNS,
+  isStaticHashRoute,
+  normalizeLegacyHashInput,
+  parseLegacyHashRoute,
+  type DetailRouteKind,
+  type ErrorRouteTarget,
+  type LegacyHashRouteTarget,
+  type RouteKind,
+  type StaticHashRoute,
+  type StaticRouteName,
+  type StaticRouteTarget,
+} from "./routes";

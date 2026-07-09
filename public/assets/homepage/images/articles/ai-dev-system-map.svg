@@ -1,0 +1,12 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 360" role="img" aria-labelledby="title desc">
+<title id="title">AI Dev System</title>
+<desc id="desc">model tools specs tasks skills</desc>
+<style>
+  .bg{fill:#fffaf0}.ink{fill:#20242c}.muted{fill:#5e6673}.line{stroke:#20242c;stroke-width:4;stroke-linecap:round;stroke-linejoin:round}.thin{stroke:#20242c;stroke-width:2;stroke-linecap:round}.accent{fill:#263238}.accent-line{stroke:#263238;stroke-width:5;stroke-linecap:round;stroke-linejoin:round}.title{font:700 34px Arial,sans-serif;fill:#20242c}.label{font:700 16px Arial,sans-serif;fill:#20242c}.small{font:14px Arial,sans-serif;fill:#5e6673}.mono{font:700 13px monospace;fill:#20242c}
+</style>
+<rect class="bg" width="900" height="360"/>
+<path d="M0 310H900M0 250H900M0 190H900M0 130H900M0 70H900M110 0V360M230 0V360M350 0V360M470 0V360M590 0V360M710 0V360M830 0V360" stroke="#e6decf" stroke-width="1" opacity=".7"/>
+<text x="48" y="62" class="title">AI Dev System</text>
+<text x="50" y="326" class="small">model tools specs tasks skills</text>
+<circle cx="450" cy="178" r="42" fill="#263238"/><text x="450" y="184" text-anchor="middle" class="label" fill="#fff">system</text><path d="M450 178L232 132" class="thin"/><rect x="174" y="108" width="116" height="48" rx="12" fill="#f5f7fb" stroke="#20242c" stroke-width="3"/><text x="232" y="137" text-anchor="middle" class="small">model</text><path d="M450 178L450 104" class="thin"/><rect x="392" y="80" width="116" height="48" rx="12" fill="#fff" stroke="#20242c" stroke-width="3"/><text x="450" y="109" text-anchor="middle" class="small">tools</text><path d="M450 178L668 132" class="thin"/><rect x="610" y="108" width="116" height="48" rx="12" fill="#f5f7fb" stroke="#20242c" stroke-width="3"/><text x="668" y="137" text-anchor="middle" class="small">specs</text><path d="M450 178L320 244" class="thin"/><rect x="262" y="220" width="116" height="48" rx="12" fill="#fff" stroke="#20242c" stroke-width="3"/><text x="320" y="249" text-anchor="middle" class="small">tasks</text><path d="M450 178L580 244" class="thin"/><rect x="522" y="220" width="116" height="48" rx="12" fill="#f5f7fb" stroke="#20242c" stroke-width="3"/><text x="580" y="249" text-anchor="middle" class="small">skills</text>
+</svg>

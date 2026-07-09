@@ -1,0 +1,12 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 360" role="img" aria-labelledby="title desc">
+<title id="title">Minimal Diff</title>
+<desc id="desc">less code same value</desc>
+<style>
+  .bg{fill:#fffaf0}.ink{fill:#20242c}.muted{fill:#5e6673}.line{stroke:#20242c;stroke-width:4;stroke-linecap:round;stroke-linejoin:round}.thin{stroke:#20242c;stroke-width:2;stroke-linecap:round}.accent{fill:#4e342e}.accent-line{stroke:#4e342e;stroke-width:5;stroke-linecap:round;stroke-linejoin:round}.title{font:700 34px Arial,sans-serif;fill:#20242c}.label{font:700 16px Arial,sans-serif;fill:#20242c}.small{font:14px Arial,sans-serif;fill:#5e6673}.mono{font:700 13px monospace;fill:#20242c}.mono{font:700 15px monospace;}
+</style>
+<rect class="bg" width="900" height="360"/>
+<path d="M0 310H900M0 250H900M0 190H900M0 130H900M0 70H900M110 0V360M230 0V360M350 0V360M470 0V360M590 0V360M710 0V360M830 0V360" stroke="#e6decf" stroke-width="1" opacity=".7"/>
+<text x="48" y="62" class="title">Minimal Diff</text>
+<text x="50" y="326" class="small">less code same value</text>
+<rect x="116" y="102" width="668" height="178" rx="18" fill="#20242c" stroke="#20242c" stroke-width="4"/><circle cx="148" cy="130" r="8" fill="#ff5f57"/><circle cx="174" cy="130" r="8" fill="#ffbd2e"/><circle cx="200" cy="130" r="8" fill="#28c840"/><text x="148" y="174" class="mono" fill="#aeea00">+ reuse existing helper</text><text x="148" y="202" class="mono" fill="#fff">+ keep patch small</text><text x="148" y="230" class="mono" fill="#aeea00">+ run verification</text><text x="148" y="258" class="mono" fill="#fff">- skip new framework</text><rect x="606" y="162" width="122" height="66" rx="10" fill="#4e342e"/><path d="M632 195h72" stroke="#fff" stroke-width="6" stroke-linecap="round"/>
+</svg>

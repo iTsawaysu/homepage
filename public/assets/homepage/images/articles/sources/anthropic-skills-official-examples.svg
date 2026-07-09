@@ -1,0 +1,30 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 360" role="img" aria-labelledby="title desc">
+<title id="title">Anthropic Skills Repository</title>
+<desc id="desc">An official reference shelf containing skill specifications templates examples and document workflows</desc>
+<style>
+  .bg{fill:#f5eadb}.ink{fill:#27201c}.muted{fill:#74665b}.paper{fill:#fffaf0}.ochre{fill:#d19a4d}.tab{fill:#b87136}.violet{fill:#7557ff}.mint{fill:#d8efe5}.line{stroke:#27201c;stroke-width:4;stroke-linecap:round;stroke-linejoin:round}.thin{stroke:#27201c;stroke-width:2;stroke-linecap:round;opacity:.45}.title{font:900 23px Arial,sans-serif;fill:#27201c}.label{font:800 15px Arial,sans-serif;fill:#27201c}.small{font:14px Arial,sans-serif;fill:#74665b}.mono{font:700 13px monospace;fill:#27201c}.rev{fill:#fffaf0}
+</style>
+<rect class="bg" width="900" height="360"/>
+<path d="M38 286h824" stroke="#27201c" stroke-width="4"/>
+<rect x="66" y="78" width="154" height="208" rx="12" class="ochre" stroke="#27201c" stroke-width="3"/>
+<rect x="92" y="78" width="128" height="208" rx="12" fill="#e0b260" stroke="#27201c" stroke-width="3"/>
+<text x="112" y="132" class="mono rev">skills/</text>
+<path d="M112 168h78M112 198h54M112 228h86" stroke="#fffaf0" stroke-width="6" stroke-linecap="round"/>
+<rect x="238" y="102" width="110" height="184" rx="10" class="paper" stroke="#27201c" stroke-width="3"/>
+<text x="263" y="140" class="label">spec</text>
+<path d="M264 172h52M264 198h40M264 224h60" class="thin"/>
+<g transform="rotate(-7 502 184)">
+  <rect x="404" y="70" width="216" height="230" rx="14" class="paper" stroke="#27201c" stroke-width="3"/>
+  <rect x="432" y="102" width="112" height="32" rx="7" class="violet"/>
+  <text x="448" y="124" class="mono rev">SKILL.md</text>
+  <path d="M438 164h132M438 194h96M438 224h118M438 254h72" class="thin"/>
+  <path d="M546 276c19-24 58-24 76 0" fill="none" stroke="#7557ff" stroke-width="4" stroke-linecap="round"/>
+</g>
+<rect x="648" y="92" width="190" height="54" rx="12" class="mint" stroke="#27201c" stroke-width="3"/>
+<text x="684" y="126" class="label">templates</text>
+<rect x="648" y="166" width="190" height="54" rx="12" class="paper" stroke="#27201c" stroke-width="3"/>
+<text x="696" y="200" class="label">examples</text>
+<rect x="648" y="240" width="190" height="46" rx="23" class="violet"/>
+<text x="674" y="269" class="mono rev">docx pdf pptx xlsx</text>
+<text x="64" y="330" class="title">official skill archive</text>
+</svg>

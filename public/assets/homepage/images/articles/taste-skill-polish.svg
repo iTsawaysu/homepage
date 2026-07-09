@@ -1,0 +1,12 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 360" role="img" aria-labelledby="title desc">
+<title id="title">Polish Pass</title>
+<desc id="desc">inspect overflow rhythm hierarchy</desc>
+<style>
+  .bg{fill:#fffaf0}.ink{fill:#20242c}.muted{fill:#5e6673}.line{stroke:#20242c;stroke-width:4;stroke-linecap:round;stroke-linejoin:round}.thin{stroke:#20242c;stroke-width:2;stroke-linecap:round}.accent{fill:#d81b60}.accent-line{stroke:#d81b60;stroke-width:5;stroke-linecap:round;stroke-linejoin:round}.title{font:700 34px Arial,sans-serif;fill:#20242c}.label{font:700 16px Arial,sans-serif;fill:#20242c}.small{font:14px Arial,sans-serif;fill:#5e6673}.mono{font:700 13px monospace;fill:#20242c}
+</style>
+<rect class="bg" width="900" height="360"/>
+<path d="M0 310H900M0 250H900M0 190H900M0 130H900M0 70H900M110 0V360M230 0V360M350 0V360M470 0V360M590 0V360M710 0V360M830 0V360" stroke="#e6decf" stroke-width="1" opacity=".7"/>
+<text x="48" y="62" class="title">Polish Pass</text>
+<text x="50" y="326" class="small">inspect overflow rhythm hierarchy</text>
+<rect x="112" y="100" width="430" height="174" rx="16" fill="#fff" stroke="#20242c" stroke-width="3"/><path d="M140 145h360M140 188h250M140 230h316" class="thin" opacity=".45"/><rect x="146" y="122" width="96" height="74" rx="8" fill="#f5f7fb" stroke="#20242c" stroke-width="3"/><circle cx="628" cy="176" r="58" fill="none" stroke="#d81b60" stroke-width="12"/><path d="M668 216l70 62" stroke="#d81b60" stroke-width="14" stroke-linecap="round"/><rect x="572" y="112" width="112" height="25" rx="8" fill="#f5f7fb" stroke="#20242c" stroke-width="3"/><text x="628" y="130" transform="translate(0 0)" text-anchor="middle" class="small">overflow</text><rect x="572" y="152" width="112" height="25" rx="8" fill="#fff" stroke="#20242c" stroke-width="3"/><text x="628" y="130" transform="translate(0 40)" text-anchor="middle" class="small">rhythm</text><rect x="572" y="192" width="112" height="25" rx="8" fill="#f5f7fb" stroke="#20242c" stroke-width="3"/><text x="628" y="130" transform="translate(0 80)" text-anchor="middle" class="small">contrast</text>
+</svg>

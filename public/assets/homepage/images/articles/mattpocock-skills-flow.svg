@@ -1,0 +1,12 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 360" role="img" aria-labelledby="title desc">
+<title id="title">Engineering Skill Lines</title>
+<desc id="desc">clarify build test review</desc>
+<style>
+  .bg{fill:#fffaf0}.ink{fill:#20242c}.muted{fill:#5e6673}.line{stroke:#20242c;stroke-width:4;stroke-linecap:round;stroke-linejoin:round}.thin{stroke:#20242c;stroke-width:2;stroke-linecap:round}.accent{fill:#039be5}.accent-line{stroke:#039be5;stroke-width:5;stroke-linecap:round;stroke-linejoin:round}.title{font:700 34px Arial,sans-serif;fill:#20242c}.label{font:700 16px Arial,sans-serif;fill:#20242c}.small{font:14px Arial,sans-serif;fill:#5e6673}.mono{font:700 13px monospace;fill:#20242c}
+</style>
+<rect class="bg" width="900" height="360"/>
+<path d="M0 310H900M0 250H900M0 190H900M0 130H900M0 70H900M110 0V360M230 0V360M350 0V360M470 0V360M590 0V360M710 0V360M830 0V360" stroke="#e6decf" stroke-width="1" opacity=".7"/>
+<text x="48" y="62" class="title">Engineering Skill Lines</text>
+<text x="50" y="326" class="small">clarify build test review</text>
+<path d="M110 238C240 98 350 260 478 142s210-16 312 102" fill="none" stroke="#20242c" stroke-width="8" stroke-linecap="round"/><path d="M110 198C258 110 342 156 450 216s212 42 340-70" fill="none" stroke="#039be5" stroke-width="8" stroke-linecap="round"/><circle cx="150" cy="196" r="18" fill="#fff" stroke="#20242c" stroke-width="4"/><text x="150" y="242" text-anchor="middle" class="small">clarify</text><circle cx="300" cy="150" r="18" fill="#fff" stroke="#20242c" stroke-width="4"/><text x="300" y="196" text-anchor="middle" class="small">design</text><circle cx="450" cy="216" r="18" fill="#fff" stroke="#20242c" stroke-width="4"/><text x="450" y="262" text-anchor="middle" class="small">build</text><circle cx="610" cy="210" r="18" fill="#fff" stroke="#20242c" stroke-width="4"/><text x="610" y="256" text-anchor="middle" class="small">test</text><circle cx="760" cy="146" r="18" fill="#fff" stroke="#20242c" stroke-width="4"/><text x="760" y="192" text-anchor="middle" class="small">review</text>
+</svg>

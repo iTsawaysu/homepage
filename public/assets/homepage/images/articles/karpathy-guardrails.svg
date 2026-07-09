@@ -1,0 +1,12 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 360" role="img" aria-labelledby="title desc">
+<title id="title">Agent Guardrails</title>
+<desc id="desc">clarify scope small verified</desc>
+<style>
+  .bg{fill:#fffaf0}.ink{fill:#20242c}.muted{fill:#5e6673}.line{stroke:#20242c;stroke-width:4;stroke-linecap:round;stroke-linejoin:round}.thin{stroke:#20242c;stroke-width:2;stroke-linecap:round}.accent{fill:#c62828}.accent-line{stroke:#c62828;stroke-width:5;stroke-linecap:round;stroke-linejoin:round}.title{font:700 34px Arial,sans-serif;fill:#20242c}.label{font:700 16px Arial,sans-serif;fill:#20242c}.small{font:14px Arial,sans-serif;fill:#5e6673}.mono{font:700 13px monospace;fill:#20242c}
+</style>
+<rect class="bg" width="900" height="360"/>
+<path d="M0 310H900M0 250H900M0 190H900M0 130H900M0 70H900M110 0V360M230 0V360M350 0V360M470 0V360M590 0V360M710 0V360M830 0V360" stroke="#e6decf" stroke-width="1" opacity=".7"/>
+<text x="48" y="62" class="title">Agent Guardrails</text>
+<text x="50" y="326" class="small">clarify scope small verified</text>
+<path d="M120 132h660M120 232h660" stroke="#20242c" stroke-width="10" stroke-linecap="round"/><path d="M180 132v100M300 132v100M420 132v100M540 132v100M660 132v100" class="line"/><path d="M150 182h560" class="accent-line"/><rect x="150" y="252" width="104" height="30" rx="8" fill="#f5f7fb" stroke="#20242c" stroke-width="3"/><text x="202" y="273" text-anchor="middle" class="small">ask</text><rect x="286" y="252" width="104" height="30" rx="8" fill="#fff" stroke="#20242c" stroke-width="3"/><text x="338" y="273" text-anchor="middle" class="small">scope</text><rect x="422" y="252" width="104" height="30" rx="8" fill="#f5f7fb" stroke="#20242c" stroke-width="3"/><text x="474" y="273" text-anchor="middle" class="small">small</text><rect x="558" y="252" width="104" height="30" rx="8" fill="#fff" stroke="#20242c" stroke-width="3"/><text x="610" y="273" text-anchor="middle" class="small">run</text><rect x="694" y="252" width="104" height="30" rx="8" fill="#f5f7fb" stroke="#20242c" stroke-width="3"/><text x="746" y="273" text-anchor="middle" class="small">report</text>
+</svg>

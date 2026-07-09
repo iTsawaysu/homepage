@@ -1,0 +1,12 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 360" role="img" aria-labelledby="title desc">
+<title id="title">Minimal Ladder</title>
+<desc id="desc">reuse before new code</desc>
+<style>
+  .bg{fill:#fffaf0}.ink{fill:#20242c}.muted{fill:#5e6673}.line{stroke:#20242c;stroke-width:4;stroke-linecap:round;stroke-linejoin:round}.thin{stroke:#20242c;stroke-width:2;stroke-linecap:round}.accent{fill:#6d4c41}.accent-line{stroke:#6d4c41;stroke-width:5;stroke-linecap:round;stroke-linejoin:round}.title{font:700 34px Arial,sans-serif;fill:#20242c}.label{font:700 16px Arial,sans-serif;fill:#20242c}.small{font:14px Arial,sans-serif;fill:#5e6673}.mono{font:700 13px monospace;fill:#20242c}
+</style>
+<rect class="bg" width="900" height="360"/>
+<path d="M0 310H900M0 250H900M0 190H900M0 130H900M0 70H900M110 0V360M230 0V360M350 0V360M470 0V360M590 0V360M710 0V360M830 0V360" stroke="#e6decf" stroke-width="1" opacity=".7"/>
+<text x="48" y="62" class="title">Minimal Ladder</text>
+<text x="50" y="326" class="small">reuse before new code</text>
+<path d="M300 104v188M600 104v188" class="line"/><path d="M300 120h300" class="accent-line"/><text x="450" y="112" text-anchor="middle" class="small">need?</text><path d="M300 154h300" class="accent-line"/><text x="450" y="146" text-anchor="middle" class="small">existing?</text><path d="M300 188h300" class="accent-line"/><text x="450" y="180" text-anchor="middle" class="small">stdlib?</text><path d="M300 222h300" class="accent-line"/><text x="450" y="214" text-anchor="middle" class="small">native?</text><path d="M300 256h300" class="accent-line"/><text x="450" y="248" text-anchor="middle" class="small">tiny code</text><circle cx="300" cy="104" r="16" fill="#6d4c41"/><circle cx="600" cy="292" r="16" fill="#6d4c41"/>
+</svg>

@@ -1,0 +1,12 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 360" role="img" aria-labelledby="title desc">
+<title id="title">Skill Package</title>
+<desc id="desc">package repeatable team habits</desc>
+<style>
+  .bg{fill:#fffaf0}.ink{fill:#20242c}.muted{fill:#5e6673}.line{stroke:#20242c;stroke-width:4;stroke-linecap:round;stroke-linejoin:round}.thin{stroke:#20242c;stroke-width:2;stroke-linecap:round}.accent{fill:#5e35b1}.accent-line{stroke:#5e35b1;stroke-width:5;stroke-linecap:round;stroke-linejoin:round}.title{font:700 34px Arial,sans-serif;fill:#20242c}.label{font:700 16px Arial,sans-serif;fill:#20242c}.small{font:14px Arial,sans-serif;fill:#5e6673}.mono{font:700 13px monospace;fill:#20242c}
+</style>
+<rect class="bg" width="900" height="360"/>
+<path d="M0 310H900M0 250H900M0 190H900M0 130H900M0 70H900M110 0V360M230 0V360M350 0V360M470 0V360M590 0V360M710 0V360M830 0V360" stroke="#e6decf" stroke-width="1" opacity=".7"/>
+<text x="48" y="62" class="title">Skill Package</text>
+<text x="50" y="326" class="small">package repeatable team habits</text>
+<path d="M310 118l140-44 140 44-140 48z" fill="#fff" stroke="#20242c" stroke-width="4"/><path d="M310 118v112l140 58V166z" fill="#f5f7fb" stroke="#20242c" stroke-width="4"/><path d="M590 118v112l-140 58V166z" fill="#fff" stroke="#20242c" stroke-width="4"/><path d="M450 74v92" class="accent-line"/><rect x="92" y="250" width="112" height="34" rx="8" fill="#f5f7fb" stroke="#20242c" stroke-width="3"/><text x="148" y="272" text-anchor="middle" class="small">habit</text><rect x="236" y="250" width="112" height="34" rx="8" fill="#fff" stroke="#20242c" stroke-width="3"/><text x="292" y="272" text-anchor="middle" class="small">skill</text><rect x="380" y="250" width="112" height="34" rx="8" fill="#f5f7fb" stroke="#20242c" stroke-width="3"/><text x="436" y="272" text-anchor="middle" class="small">install</text><rect x="524" y="250" width="112" height="34" rx="8" fill="#fff" stroke="#20242c" stroke-width="3"/><text x="580" y="272" text-anchor="middle" class="small">run</text><rect x="668" y="250" width="112" height="34" rx="8" fill="#f5f7fb" stroke="#20242c" stroke-width="3"/><text x="724" y="272" text-anchor="middle" class="small">learn</text>
+</svg>

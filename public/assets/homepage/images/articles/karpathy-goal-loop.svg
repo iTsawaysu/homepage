@@ -1,0 +1,12 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 360" role="img" aria-labelledby="title desc">
+<title id="title">Learning Spiral</title>
+<desc id="desc">failure patterns become rules</desc>
+<style>
+  .bg{fill:#fffaf0}.ink{fill:#20242c}.muted{fill:#5e6673}.line{stroke:#20242c;stroke-width:4;stroke-linecap:round;stroke-linejoin:round}.thin{stroke:#20242c;stroke-width:2;stroke-linecap:round}.accent{fill:#ef6c00}.accent-line{stroke:#ef6c00;stroke-width:5;stroke-linecap:round;stroke-linejoin:round}.title{font:700 34px Arial,sans-serif;fill:#20242c}.label{font:700 16px Arial,sans-serif;fill:#20242c}.small{font:14px Arial,sans-serif;fill:#5e6673}.mono{font:700 13px monospace;fill:#20242c}
+</style>
+<rect class="bg" width="900" height="360"/>
+<path d="M0 310H900M0 250H900M0 190H900M0 130H900M0 70H900M110 0V360M230 0V360M350 0V360M470 0V360M590 0V360M710 0V360M830 0V360" stroke="#e6decf" stroke-width="1" opacity=".7"/>
+<text x="48" y="62" class="title">Learning Spiral</text>
+<text x="50" y="326" class="small">failure patterns become rules</text>
+<path d="M458 186m-18 0a18 18 0 1 0 36 0a36 36 0 1 0-72 0a58 58 0 1 0 116 0a82 82 0 1 0-164 0" fill="none" stroke="#ef6c00" stroke-width="8" stroke-linecap="round"/><path d="M356 184l-20-13 3 24" fill="none" class="accent-line"/><rect x="246" y="98" width="116" height="40" rx="10" fill="#f5f7fb" stroke="#20242c" stroke-width="3"/><text x="304" y="123" text-anchor="middle" class="small">observe</text><rect x="528" y="98" width="116" height="40" rx="10" fill="#fff" stroke="#20242c" stroke-width="3"/><text x="586" y="123" text-anchor="middle" class="small">name</text><rect x="560" y="228" width="116" height="40" rx="10" fill="#f5f7fb" stroke="#20242c" stroke-width="3"/><text x="618" y="253" text-anchor="middle" class="small">rule</text><rect x="224" y="228" width="116" height="40" rx="10" fill="#fff" stroke="#20242c" stroke-width="3"/><text x="282" y="253" text-anchor="middle" class="small">try</text>
+</svg>

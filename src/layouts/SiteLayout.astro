@@ -1,0 +1,15 @@
+---
+import LegacyPatches from "../components/site/LegacyPatches.astro";
+import LegacyRuntime from "../components/site/LegacyRuntime.astro";
+import SiteHead from "../components/site/SiteHead.astro";
+---
+
+<!DOCTYPE html>
+<html lang="en" class="no-js">
+  <SiteHead />
+  <body>
+    <slot />
+    <LegacyPatches />
+    <LegacyRuntime />
+  </body>
+</html>
