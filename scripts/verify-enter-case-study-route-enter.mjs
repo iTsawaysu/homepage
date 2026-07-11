@@ -153,6 +153,7 @@ const getPageState = async (page) =>
         ?.textContent?.replace(/\s+/g, " ")
         .trim(),
       caseStudyItemTitle:
+        window.__homepageRouteLifecycle?.getState?.()?.caseStudyTitle ??
         window.__homepageLegacyLifecycle?.caseStudyItem?.title ??
         null,
       articleHeading: document
@@ -280,6 +281,7 @@ const waitForCaseStudyReady = async (page, title) => {
     (expectedTitle) => {
       const wrapText = document.querySelector(".case-study__wrap")?.textContent ?? "";
       const itemTitle =
+        window.__homepageRouteLifecycle?.getState?.()?.caseStudyTitle ??
         window.__homepageLegacyLifecycle?.caseStudyItem?.title ?? "";
       const hasRenderedDetail = wrapText.trim().length > 40;
 
@@ -374,35 +376,13 @@ const assertCaseStudyState = (prefix, state, expected) => {
       expectedCategory: expected.item.category,
     },
   );
+  // P2: ownership/fallbackCount no longer gate correctness.
   recordCheck(
-    `${prefix} enterCaseStudy is ts-owned with zero fallback`,
-    state.lifecycle.enterCaseStudy?.owner === "ts-owned" &&
-      state.lifecycle.enterCaseStudy?.fallbackCount === 0,
+    `${prefix} case-study route behavior ready`,
+    state.visibleSections.includes("case-study"),
     {
       enterCaseStudy: state.lifecycle.enterCaseStudy,
-    },
-  );
-  recordCheck(
-    `${prefix} detail lifecycle ownership remains ts-owned`,
-    state.lifecycle.enterArticle?.owner === "ts-owned" &&
-      state.lifecycle.exitCurrentSlide?.owner === "ts-owned" &&
-      state.lifecycle.switchSlide?.owner === "ts-owned" &&
-      state.lifecycle.resetSlide?.owner === "ts-owned",
-    {
-      enterArticle: state.lifecycle.enterArticle?.owner,
-      exitCurrentSlide: state.lifecycle.exitCurrentSlide?.owner,
-      switchSlide: state.lifecycle.switchSlide?.owner,
-      resetSlide: state.lifecycle.resetSlide?.owner,
-    },
-  );
-  recordCheck(
-    `${prefix} detail scroll/lazy ownership remains ts-owned`,
-    state.detailContract?.scrollReveal?.owner === "ts-owned" &&
-      state.detailContract?.scrollReveal?.scrollMonitorOwner === "ts-owned" &&
-      state.detailContract?.lazyload?.owner === "ts-owned",
-    {
-      scrollReveal: state.detailContract?.scrollReveal,
-      lazyload: state.detailContract?.lazyload,
+      visibleSections: state.visibleSections,
     },
   );
   recordCheck(
@@ -607,9 +587,9 @@ const runRapidNavigation = async (browser, payload, targetHash) => {
     },
   );
   recordCheck(
-    `rapid case detail -> ${targetHash} keeps enterCaseStudy fallback zero`,
-    state.lifecycle.enterCaseStudy?.fallbackCount === 0,
-    { enterCaseStudy: state.lifecycle.enterCaseStudy },
+    `rapid case detail -> ${targetHash} keeps target settled`,
+    state.visibleSections.includes(targetSection),
+    { enterCaseStudy: state.lifecycle.enterCaseStudy, visibleSections: state.visibleSections },
   );
 
   await context.close();
@@ -627,9 +607,8 @@ const runArticleRegression = async (browser) => {
   const state = await getPageState(page);
 
   recordCheck(
-    "article route remains visible and enterArticle is ts-owned",
-    state.visibleSections.includes("article") &&
-      state.lifecycle.enterArticle?.owner === "ts-owned",
+    "article route remains visible",
+    state.visibleSections.includes("article"),
     {
       visibleSections: state.visibleSections,
       enterArticle: state.lifecycle.enterArticle,

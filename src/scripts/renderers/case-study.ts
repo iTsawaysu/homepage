@@ -5,7 +5,7 @@ import {
   renderLegacyTemplate,
 } from "./html";
 
-export type CaseStudyTemplateData = {
+type CaseStudyTemplateData = {
   title: unknown;
   image: unknown;
   padding: unknown;

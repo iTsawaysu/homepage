@@ -11,7 +11,7 @@ export {
   type DetailRouteRetryContract,
 } from "./routes";
 
-export type ActiveNavApplyResult =
+type ActiveNavApplyResult =
   | {
       ok: true;
       routeName: string;

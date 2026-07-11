@@ -5,11 +5,9 @@ import {
 } from "./parse-hash";
 import { dispatchLegacyRouteTarget } from "./dispatch";
 import {
-  getLegacyRuntimeBridge,
-  LEGACY_RUNTIME_BRIDGE_READY_EVENT,
-} from "./legacy-runtime-bridge";
+  getRouteLifecycle,
+} from "../runtime/route-lifecycle";
 import {
-  getNativeRuntimeHost,
   NATIVE_RUNTIME_READY_EVENT,
 } from "../runtime/native-runtime";
 
@@ -51,10 +49,8 @@ const routeCurrentHash = (): void => {
 };
 
 const startRouter = (): boolean => {
-  const bridge = getLegacyRuntimeBridge();
-  const nativeHost = getNativeRuntimeHost();
-
-  if (isStarted || (!nativeHost?.isReady() && !bridge?.isReady())) {
+  // P3: ready-gate only on RouteLifecycle.
+  if (isStarted || !getRouteLifecycle()?.isReady()) {
     return false;
   }
 
@@ -70,9 +66,7 @@ export const initHashRouter = (): void => {
     return;
   }
 
-  window.addEventListener(LEGACY_RUNTIME_BRIDGE_READY_EVENT, () => {
-    startRouter();
-  });
+  // RouteLifecycle is installed inside initNativeRuntimeHost before READY fires.
   window.addEventListener(NATIVE_RUNTIME_READY_EVENT, () => {
     startRouter();
   });

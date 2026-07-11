@@ -953,6 +953,33 @@ export const legacyStyleHtml = String.raw`    <style>
       }
 
       @media print, screen and (max-width: 767px) {
+        #main {
+          height: calc(100dvh - 75px);
+        }
+
+        .hello p {
+          line-height: 2.2;
+        }
+
+        .hello p a {
+          line-height: 1.2;
+        }
+
+        .achievements .nominations ul {
+          display: grid;
+          grid-template-columns: repeat(2, 1fr);
+          column-gap: 20px;
+          row-gap: 25px;
+          margin: 0;
+        }
+
+        .achievements .nominations li {
+          float: none;
+          width: auto;
+          height: 150px;
+          margin: 0;
+        }
+
         .project-note {
           align-items: flex-start;
           flex-direction: column;
@@ -974,8 +1001,40 @@ export const legacyStyleHtml = String.raw`    <style>
           line-height: 1.5;
         }
 
+        .contact-icons ul {
+          display: flex;
+          flex-wrap: nowrap;
+          justify-content: center;
+          align-items: flex-start;
+        }
+
         .contact-icons ul li {
-          margin: 0 10px 18px;
+          margin: 0 6px 18px;
+        }
+
+        .contact-icons .social-link {
+          box-sizing: border-box;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          min-width: 44px;
+          min-height: 44px;
+        }
+
+        .contact-icons .wechat-card {
+          left: auto;
+          right: 0;
+          transform: translate(0, -10px) scale(.92);
+        }
+
+        .contact-icons .wechat-card:after {
+          left: auto;
+          right: 15px;
+          transform: translateX(0) rotate(45deg);
+        }
+
+        .contact-icons .wechat-item.is-open .wechat-card {
+          transform: translate(0, 0) scale(1);
         }
       }
 
@@ -992,83 +1051,4 @@ export const legacyStyleHtml = String.raw`    <style>
         }
       }
     </style>
-`;
-export const legacyMainScriptHtml = String.raw`    <script src="/assets/homepage/js/main.js"></script>
-`;
-export const templateScriptsHtml = String.raw`    <script id="toaster-template" type="text/template">
-      <div class="toaster toaster{{= it.ind }}">
-        <p>{{! it.message }}</p>{{? it.isReload }}
-        <button class="btn-refresh js-refresh">刷新</button>{{? }}
-        <button class="js-dismiss"><span class="sr-only">关闭</span><i class="icon icon-cross"></i></button>
-      </div>
-    </script>
-    <script id="case-study-template" type="text/template">
-      <div class="case-study__section tldr">
-        <div class="wrap">
-          <div class="col col-12">
-            <div style="background-image: url({{! it.image }}); padding-bottom:{{! it.padding}}%;" title="{{! it.title }}" class="glitch__cont">
-              <div style="background-image: url({{! it.image }}); padding-bottom:{{! it.padding}}%;" title="{{! it.title }}" class="glitch__img"></div>
-              <div style="background-image: url({{! it.image }}); padding-bottom:{{! it.padding}}%;" title="{{! it.title }}" class="glitch__img"></div>
-              <div style="background-image: url({{! it.image }}); padding-bottom:{{! it.padding}}%;" title="{{! it.title }}" class="glitch__img"></div>
-              <div style="background-image: url({{! it.image }}); padding-bottom:{{! it.padding}}%;" title="{{! it.title }}" class="glitch__img"></div>
-              <div style="background-image: url({{! it.image }}); padding-bottom:{{! it.padding}}%;" title="{{! it.title }}" class="glitch__img"></div>
-            </div>
-            <h2>摘要</h2>
-            <hr><i class="pattern"></i>
-            <p>{{= it.tldr }}</p>{{? it.url.live }}<a href="{{! it.url.live }}" data-text="访问网站" target="_blank" class="cta">访问网站</a>{{? }}
-          </div>
-          <div class="tldr-sub col col-6">
-            <div class="case-study__section technology">
-              <h3>使用技术</h3>
-              <hr><i class="pattern"></i>
-              <ul>{{~it.technology :value:index }}
-                <li>{{=value}}</li>{{~}}
-              </ul>
-            </div>
-          </div>
-          <div class="tldr-sub col col-6">
-            <div class="case-study__section role">
-              <h3>角色</h3>
-              <hr><i class="pattern"></i>
-              <p>{{! it.role }}</p>
-            </div>
-          </div>
-        </div>
-      </div>{{? it.challenges }}
-      <div class="case-study__section challenges">
-        <h2>挑战</h2>
-        <hr><i class="pattern"></i>{{~it.challenges :value:index }}
-        <p>{{=value}}</p>{{~}}
-        {{? }}
-        {{? it.solutions }}
-      </div>
-      <div class="case-study__section solutions">
-        <h2>解决方案</h2>
-        <hr><i class="pattern"></i>{{~it.solutions :value:index }}
-        <p>{{=value}}</p>{{~}}
-      </div>{{? }}
-      <div class="case-study__section navigation">
-        <div class="wrap">
-          <div class="col col-12"><a href="{{! it.nextItem.url}}">
-              <div class="navigation-label">下一篇：<span>{{! it.nextItem.title }}</span></div><i class="line"></i><i class="navigation-shadow"></i>
-              <div class="navigation-icon"><i class="icon icon-chevron-right"></i><i class="icon icon-chevron-right"></i></div></a></div>
-          <div class="col col-12"><a href="/#/{{! it.category }}/" class="js-back-to-listing">
-              <div class="navigation-label">返回列表</div><i class="line"></i><i class="navigation-shadow"></i>
-              <div class="navigation-icon"><i class="icon icon-chevron-right"></i><i class="icon icon-chevron-right"></i></div></a></div>
-        </div>
-      </div>
-    </script>
-    <script id="article-template" type="text/template">
-      <div class="article__section">{{= it.content }}</div>
-      <div class="article__section navigation">
-        <div class="wrap">
-          <div class="col col-12"><a href="{{! it.nextItem.url}}">
-              <div class="navigation-label">下一篇：<span>{{! it.nextItem.title }}</span></div><i class="line"></i><i class="navigation-shadow"></i>
-              <div class="navigation-icon"><i class="icon icon-chevron-right"></i><i class="icon icon-chevron-right"></i></div></a></div>
-          <div class="col col-12"><a href="/#/achievements/" class="js-back-to-listing">
-              <div class="navigation-label">返回列表</div><i class="line"></i><i class="navigation-shadow"></i>
-              <div class="navigation-icon"><i class="icon icon-chevron-right"></i><i class="icon icon-chevron-right"></i></div></a></div>
-        </div>
-      </div>
-    </script>
 `;

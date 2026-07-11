@@ -1,5 +1,6 @@
 import { getGsapEngine } from "../animation/gsap";
 import type { NativeAnalytics } from "./analytics";
+import { getRouteLifecycle } from "./route-lifecycle";
 
 const DESKTOP_QUERY = "(min-width: 1024px)" as const;
 const LOGO_TEXT = "iTsawaysu" as const;
@@ -178,16 +179,75 @@ const animateMenuHover = (isHovering: boolean): void => {
   });
 };
 
-const closeMenu = (): void => {
+let lockedScrollY = 0;
+
+const isMobileMenuViewport = (): boolean =>
+  !window.matchMedia(DESKTOP_QUERY).matches;
+
+const lockBodyScroll = (): void => {
+  lockedScrollY = window.scrollY;
+  const body = document.body;
+  body.style.position = "fixed";
+  body.style.top = `-${lockedScrollY}px`;
+  body.style.left = "0";
+  body.style.right = "0";
+  body.style.width = "100%";
+  body.classList.add("menu-open");
+};
+
+const unlockBodyScroll = (): void => {
+  const body = document.body;
+
+  if (!body.classList.contains("menu-open")) {
+    return;
+  }
+
+  body.style.position = "";
+  body.style.top = "";
+  body.style.left = "";
+  body.style.right = "";
+  body.style.width = "";
+  body.classList.remove("menu-open");
+  window.scrollTo(0, lockedScrollY);
+};
+
+const setBackgroundInert = (inert: boolean): void => {
+  const main = document.querySelector<HTMLElement>("main#main");
+
+  if (!main) {
+    return;
+  }
+
+  if (inert) {
+    main.setAttribute("inert", "");
+    main.setAttribute("aria-hidden", "true");
+  } else {
+    main.removeAttribute("inert");
+    main.removeAttribute("aria-hidden");
+  }
+};
+
+const closeMenu = (options?: { restoreFocus?: boolean }): void => {
   const menu = document.querySelector<HTMLElement>(".header .menu");
   const primaryNav = document.querySelector<HTMLElement>(".primary-nav");
   const headerWrap = document.querySelector<HTMLElement>(".header-wrap");
+  const wasOpen = menu?.classList.contains("active") ?? false;
 
   menu?.classList.remove("active");
   primaryNav?.classList.remove("active");
   headerWrap?.classList.remove("active");
+  menu?.setAttribute("aria-expanded", "false");
   setMenuListHeight(false);
   animateMenuButton(false);
+
+  if (wasOpen) {
+    unlockBodyScroll();
+    setBackgroundInert(false);
+
+    if (options?.restoreFocus) {
+      menu?.focus();
+    }
+  }
 };
 
 const toggleMenu = (): void => {
@@ -204,13 +264,35 @@ const toggleMenu = (): void => {
   menu.classList.toggle("active", isOpen);
   primaryNav.classList.toggle("active", isOpen);
   headerWrap.classList.toggle("active", isOpen);
+  menu.setAttribute("aria-expanded", isOpen ? "true" : "false");
   setMenuListHeight(isOpen);
   animateMenuButton(isOpen);
+
+  if (isOpen) {
+    if (isMobileMenuViewport()) {
+      lockBodyScroll();
+      setBackgroundInert(true);
+    }
+  } else {
+    unlockBodyScroll();
+    setBackgroundInert(false);
+  }
 };
 
 const initMenu = (): void => {
   const menu = document.querySelector<HTMLElement>(".header .menu");
   const primaryNav = document.querySelector<HTMLElement>(".primary-nav");
+
+  if (menu) {
+    menu.setAttribute("aria-expanded", "false");
+
+    if (primaryNav) {
+      if (!primaryNav.id) {
+        primaryNav.id = "primary-nav";
+      }
+      menu.setAttribute("aria-controls", primaryNav.id);
+    }
+  }
 
   menu?.addEventListener("click", (event) => {
     event.preventDefault();
@@ -236,6 +318,15 @@ const initMenu = (): void => {
       closeMenu();
     });
   }
+
+  document.addEventListener("keydown", (event) => {
+    if (
+      event.key === "Escape" &&
+      menu?.classList.contains("active")
+    ) {
+      closeMenu({ restoreFocus: true });
+    }
+  });
 
   setHeaderWrapSize();
   window.addEventListener("resize", debounce(setHeaderWrapSize, 250));
@@ -486,11 +577,7 @@ const initNavigationClones = (analytics: NativeAnalytics): void => {
       link.addEventListener("click", () => {
         const routeName = link.dataset.name ?? "";
         const currentPage =
-          typeof window.__homepageLegacyLifecycle === "object" &&
-          window.__homepageLegacyLifecycle !== null &&
-          "currentPage" in window.__homepageLegacyLifecycle
-            ? String(window.__homepageLegacyLifecycle.currentPage)
-            : "hello";
+          getRouteLifecycle()?.getState().currentPage || "hello";
 
         if (routeName && routeName !== currentPage) {
           createElementClone(link);

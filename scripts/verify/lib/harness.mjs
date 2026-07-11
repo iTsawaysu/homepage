@@ -172,3 +172,78 @@ export const writeJsonFile = async (
     `${JSON.stringify(value, null, 2)}${trailingNewline ? "\n" : ""}`,
   );
 };
+
+/**
+ * P2 RouteLifecycle observability helper.
+ * Prefer window.__homepageRouteLifecycle; fall back to legacy bag while P3 lands.
+ */
+export const getRouteState = (page) =>
+  page.evaluate(() => {
+    const mirror = window.__homepageRouteLifecycle?.getState?.();
+    if (mirror) {
+      return {
+        ...mirror,
+        ready: window.__homepageRouteLifecycle?.isReady?.() ?? false,
+        source: "route-lifecycle",
+      };
+    }
+
+    const lifecycle = window.__homepageLegacyLifecycle;
+    if (lifecycle && typeof lifecycle === "object") {
+      return {
+        currentPage:
+          typeof lifecycle.currentPage === "string" ? lifecycle.currentPage : "",
+        contentPayloadReady: Boolean(lifecycle.contentPayloadReady),
+        caseStudyTitle: lifecycle.caseStudyItem?.title ?? null,
+        articleTitle: lifecycle.articleItem?.title ?? null,
+        ready: true,
+        source: "legacy-lifecycle",
+      };
+    }
+
+    return null;
+  });
+
+export const waitForRoutePage = async (page, expectedPage, timeout = 20000) => {
+  await page.waitForFunction(
+    (expected) => {
+      const mirrorPage = window.__homepageRouteLifecycle?.getState?.()?.currentPage;
+      if (mirrorPage === expected) {
+        return true;
+      }
+
+      return window.__homepageLegacyLifecycle?.currentPage === expected;
+    },
+    expectedPage,
+    { timeout },
+  );
+};
+
+export const waitForRouteDetailTitle = async (
+  page,
+  kind,
+  expectedTitle,
+  timeout = 25000,
+) => {
+  await page.waitForFunction(
+    ({ detailKind, title }) => {
+      const state = window.__homepageRouteLifecycle?.getState?.();
+      if (state) {
+        const actual =
+          detailKind === "case-study" ? state.caseStudyTitle : state.articleTitle;
+        if (actual === title) {
+          return true;
+        }
+      }
+
+      const lifecycle = window.__homepageLegacyLifecycle;
+      const item =
+        detailKind === "case-study"
+          ? lifecycle?.caseStudyItem
+          : lifecycle?.articleItem;
+      return item?.title === title;
+    },
+    { detailKind: kind, title: expectedTitle },
+    { timeout },
+  );
+};

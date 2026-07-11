@@ -1,31 +1,30 @@
-import { getGsapEngine } from "./gsap";
-import { prepareLegacyTitleReveal } from "./title-reveal";
+/**
+ * Specialized achievements enter — algorithm unchanged; shared helpers only (P4).
+ */
 
-type LegacyScrollWatcher = {
-  enterViewport: (callback: () => void) => unknown;
-};
+import { getGsapEngine } from "../gsap";
+import { prepareLegacyTitleReveal } from "../title-reveal";
+import {
+  type EnterAnimationFailure,
+  type EnterAnimationOptions,
+  type EnterAnimationResult,
+  type LegacyScrollWatcher,
+  failResult,
+  getRequiredElement,
+  getRequiredElements,
+  hasScrollWatcherApi,
+  isFailure,
+  okResult,
+} from "./runner";
 
-type EnterAchievementsLegacyState = {
+export type EnterAchievementsLegacyState = {
   bAchievements?: unknown;
   nominationsWatcher?: unknown;
   ribbonsWatcher?: unknown;
   listingsWatcher?: unknown;
 };
 
-type EnterAchievementsAnimationFailure = {
-  ok: false;
-  reason: string;
-};
-
-export type EnterAchievementsAnimationResult =
-  | {
-      ok: true;
-    }
-  | EnterAchievementsAnimationFailure;
-
-type EnterAchievementsAnimationOptions = {
-  onAsyncFallback: (reason: string) => void;
-};
+type EnterAchievementsAnimationResult = EnterAnimationResult;
 
 declare global {
   interface Window {
@@ -37,58 +36,14 @@ declare global {
 
 const MOBILE_QUERY = "(max-width: 767px)" as const;
 
-const getRequiredElement = <T extends Element>(
-  selector: string,
-): T | EnterAchievementsAnimationFailure => {
-  const element = document.querySelector<T>(selector);
-
-  if (!element) {
-    return {
-      ok: false,
-      reason: `dom-missing:${selector}`,
-    };
-  }
-
-  return element;
-};
-
-const getRequiredElements = <T extends Element>(
-  selector: string,
-): T[] | EnterAchievementsAnimationFailure => {
-  const elements = Array.from(document.querySelectorAll<T>(selector));
-
-  if (elements.length === 0) {
-    return {
-      ok: false,
-      reason: `dom-missing:${selector}`,
-    };
-  }
-
-  return elements;
-};
-
-const isFailure = <T extends object>(
-  value: T | EnterAchievementsAnimationFailure,
-): value is EnterAchievementsAnimationFailure =>
-  "ok" in value && value.ok === false;
-
-const isObjectRecord = (value: unknown): value is Record<string, unknown> =>
-  (typeof value === "object" && value !== null) || typeof value === "function";
-
-const hasScrollWatcherApi = (value: unknown): value is LegacyScrollWatcher =>
-  isObjectRecord(value) && typeof value.enterViewport === "function";
-
 const getLegacyWatcher = (
   legacyState: EnterAchievementsLegacyState,
   key: "nominationsWatcher" | "ribbonsWatcher" | "listingsWatcher",
-): LegacyScrollWatcher | EnterAchievementsAnimationFailure => {
+): LegacyScrollWatcher | EnterAnimationFailure => {
   const watcher = legacyState[key];
 
-  if (!hasScrollWatcherApi(watcher)) {
-    return {
-      ok: false,
-      reason: `scroll-watcher-missing:${key}`,
-    };
+  if (!hasScrollWatcherApi(watcher, "enterViewport")) {
+    return failResult(`scroll-watcher-missing:${key}`);
   }
 
   return watcher;
@@ -104,7 +59,7 @@ const addNominationInitClass = (pattern: HTMLElement): void => {
 
 export const runEnterAchievementsAnimation = (
   legacyState: EnterAchievementsLegacyState,
-  options: EnterAchievementsAnimationOptions,
+  options: EnterAnimationOptions,
 ): EnterAchievementsAnimationResult => {
   const bar = getRequiredElement<HTMLElement>(".achievements .bar");
   const icon = getRequiredElement<HTMLElement>(".achievements h1 .icon");
@@ -238,7 +193,7 @@ export const runEnterAchievementsAnimation = (
     delay: 0.2,
   });
 
-  nominationsWatcher.enterViewport(() => {
+  nominationsWatcher.enterViewport?.(() => {
     gsap.to(headings, {
       opacity: 1,
       y: 0,
@@ -262,7 +217,7 @@ export const runEnterAchievementsAnimation = (
     });
   });
 
-  ribbonsWatcher.enterViewport(() => {
+  ribbonsWatcher.enterViewport?.(() => {
     gsap.to(ribbonsText, {
       opacity: 1,
       y: 0,
@@ -299,12 +254,10 @@ export const runEnterAchievementsAnimation = (
   };
 
   if (mobileBranch) {
-    listingsWatcher?.enterViewport(revealListing);
+    listingsWatcher?.enterViewport?.(revealListing);
   } else {
     revealListing();
   }
 
-  return {
-    ok: true,
-  };
+  return okResult();
 };

@@ -16,26 +16,24 @@ export type LegacyTitleRevealRoute =
   | "contact"
   | "coding"
   | "design";
-export type LegacyTitleBaffleOwner = "ts-owned";
-export type LegacyTitleRevealOwner = "ts-owned";
 
 type LegacyBaffleInstance = {
   start: () => unknown;
   reveal: (durationMs: number, delayMs: number) => unknown;
 };
 
-export type TitleRevealFailure = {
+type TitleRevealFailure = {
   ok: false;
   reason: string;
 };
 
-export type TitleRevealResult =
+type TitleRevealResult =
   | {
       ok: true;
     }
   | TitleRevealFailure;
 
-export type PreparedLegacyTitleReveal = {
+type PreparedLegacyTitleReveal = {
   ok: true;
   routeName: LegacyTitleRevealRoute;
   baffleKey: LegacyTitleRevealBaffleKey;
@@ -47,16 +45,6 @@ type LegacyTitleRevealOptions = {
   routeName: LegacyTitleRevealRoute;
   baffleKey: LegacyTitleRevealBaffleKey;
   titleTextSelector: string;
-};
-
-export type TitleRevealHelperState = {
-  ready: true;
-  owner: LegacyTitleRevealOwner;
-  baffleOwner: LegacyTitleBaffleOwner;
-  durationMs: number;
-  delayMs: number;
-  reusedBaffleKeys: LegacyTitleRevealBaffleKey[];
-  routeNames: LegacyTitleRevealRoute[];
 };
 
 const getErrorMessage = (error: unknown): string =>
@@ -156,28 +144,3 @@ export const prepareLegacyTitleReveal = (
   };
 };
 
-export const getTitleRevealHelperState = (): TitleRevealHelperState => ({
-  ready: true,
-  owner: "ts-owned",
-  baffleOwner: "ts-owned",
-  durationMs: LEGACY_ANIMATION_TIMINGS.titleRevealDurationMs,
-  delayMs: LEGACY_ANIMATION_TIMINGS.titleRevealDelayMs,
-  reusedBaffleKeys: [
-    "bHello",
-    "bAbout",
-    "bAchievements",
-    "bError",
-    "bContact",
-    "bCoding",
-    "bDesign",
-  ],
-  routeNames: [
-    "hello",
-    "about",
-    "achievements",
-    "error",
-    "contact",
-    "coding",
-    "design",
-  ],
-});

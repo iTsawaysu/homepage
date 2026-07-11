@@ -1,21 +1,11 @@
+import { LEGACY_ANIMATION_TIMINGS } from "../animation/timings";
+
 export const DEFAULT_HASH_ROUTE = "#/hello/" as const;
 export const ERROR_ROUTE_NAME = "error" as const;
 export const ARTICLE_BACK_LISTING_CATEGORY = "achievements" as const;
 export const ARTICLE_BACK_LISTING_HREF = "/#/achievements/" as const;
 
-export const LEGACY_PATHJS_ROUTE_PATTERNS = [
-  "#/hello/",
-  "#/about/",
-  "#/achievements/",
-  "#/coding/",
-  "#/design/",
-  "#/design/",
-  "#/case-study/:param",
-  "#/article/:param",
-  "#/contact/",
-] as const;
-
-export const STATIC_ROUTE_CONTRACTS = [
+const STATIC_ROUTE_CONTRACTS = [
   {
     kind: "static",
     page: "hello",
@@ -63,6 +53,7 @@ export const CASE_STUDY_LEGACY_ALIASES_BY_CURRENT_SLUG = {
   "small-design-system": "envirobot",
 } as const satisfies Record<string, string>;
 
+// Delay numbers are MotionScale-sourced; structural route fields stay here.
 export const DETAIL_ROUTE_RETRY_CONTRACTS = {
   "case-study": {
     kind: "case-study",
@@ -72,10 +63,10 @@ export const DETAIL_ROUTE_RETRY_CONTRACTS = {
     itemKey: "caseStudyItem",
     getMethod: "getCaseStudy",
     setMethod: "setCaseStudy",
-    routeDispatchDelayMs: 500,
+    routeDispatchDelayMs: LEGACY_ANIMATION_TIMINGS.detailRouteDispatchDelayMs,
     contentPayloadReadyKey: "contentPayloadReady",
-    contentRetryDelayMs: 1000,
-    switchSlideRetryDelayMs: 100,
+    contentRetryDelayMs: LEGACY_ANIMATION_TIMINGS.contentPayloadRetryDelayMs,
+    switchSlideRetryDelayMs: LEGACY_ANIMATION_TIMINGS.switchSlideRetryDelayMs,
   },
   article: {
     kind: "article",
@@ -85,35 +76,27 @@ export const DETAIL_ROUTE_RETRY_CONTRACTS = {
     itemKey: "articleItem",
     getMethod: "getArticle",
     setMethod: "setArticle",
-    routeDispatchDelayMs: 500,
+    routeDispatchDelayMs: LEGACY_ANIMATION_TIMINGS.detailRouteDispatchDelayMs,
     contentPayloadReadyKey: "contentPayloadReady",
-    contentRetryDelayMs: 1000,
-    switchSlideRetryDelayMs: 100,
+    contentRetryDelayMs: LEGACY_ANIMATION_TIMINGS.contentPayloadRetryDelayMs,
+    switchSlideRetryDelayMs: LEGACY_ANIMATION_TIMINGS.switchSlideRetryDelayMs,
   },
 } as const;
 
-export type StaticRouteContract = (typeof STATIC_ROUTE_CONTRACTS)[number];
+type StaticRouteContract = (typeof STATIC_ROUTE_CONTRACTS)[number];
 export type StaticRouteName = StaticRouteContract["page"];
 export type StaticHashRoute = StaticRouteContract["hash"];
 export type CaseStudyCategory = "coding" | "design";
-export type CaseStudyCurrentSlug = string;
-export type CaseStudyLegacyAlias = string;
-export type CaseStudySlug = string;
-export type ArticleSlug = string;
-export type ArticleHashRoute = `#/article/${string}`;
-export type CaseStudyHashRoute = `#/case-study/${string}`;
+type CaseStudySlug = string;
+type ArticleSlug = string;
+type ArticleHashRoute = `#/article/${string}`;
+type CaseStudyHashRoute = `#/case-study/${string}`;
 export type RouteKind = "static" | "case-study" | "article" | "error";
 export type DetailRouteKind = "case-study" | "article";
 export type ActiveNavCategory = StaticRouteName | CaseStudyCategory;
 export type DetailRouteRetryContract =
   (typeof DETAIL_ROUTE_RETRY_CONTRACTS)[DetailRouteKind];
 
-export type CaseStudyRouteContract = {
-  index: number;
-  currentSlug: CaseStudyCurrentSlug;
-  legacyAlias: CaseStudyLegacyAlias | null;
-  category: CaseStudyCategory;
-};
 
 export type StaticRouteTarget = {
   kind: "static";
@@ -123,7 +106,7 @@ export type StaticRouteTarget = {
   activeNav: StaticRouteName;
 };
 
-export type CaseStudyRouteTarget = {
+type CaseStudyRouteTarget = {
   kind: "case-study";
   hash: CaseStudyHashRoute;
   page: "case-study";
@@ -133,7 +116,7 @@ export type CaseStudyRouteTarget = {
   retry: typeof DETAIL_ROUTE_RETRY_CONTRACTS["case-study"];
 };
 
-export type ArticleRouteTarget = {
+type ArticleRouteTarget = {
   kind: "article";
   hash: ArticleHashRoute;
   page: "article";
@@ -160,14 +143,6 @@ export type LegacyHashRouteTarget =
   | ArticleRouteTarget
   | ErrorRouteTarget;
 
-export type ArticleRouteContract = {
-  index: number;
-  slug: ArticleSlug;
-  hash: ArticleHashRoute;
-  activeNav: null;
-  backListingCategory: typeof ARTICLE_BACK_LISTING_CATEGORY;
-  backListingHref: typeof ARTICLE_BACK_LISTING_HREF;
-};
 
 const STATIC_ROUTES_BY_HASH = new Map<string, StaticRouteContract>(
   STATIC_ROUTE_CONTRACTS.map((route) => [route.hash, route]),
@@ -175,20 +150,20 @@ const STATIC_ROUTES_BY_HASH = new Map<string, StaticRouteContract>(
 
 const DETAIL_SLUG_PATTERN = /^[a-z0-9]+(?:-[a-z0-9]+)*$/;
 
-export const isArticleSlug = (value: string): value is ArticleSlug =>
+const isArticleSlug = (value: string): value is ArticleSlug =>
   DETAIL_SLUG_PATTERN.test(value);
 
-export const isCaseStudySlug = (value: string): value is CaseStudySlug =>
+const isCaseStudySlug = (value: string): value is CaseStudySlug =>
   DETAIL_SLUG_PATTERN.test(value);
 
 export const isStaticHashRoute = (value: string): value is StaticHashRoute =>
   STATIC_ROUTES_BY_HASH.has(value);
 
-export function articleHashFromSlug(slug: ArticleSlug): ArticleHashRoute {
+function articleHashFromSlug(slug: ArticleSlug): ArticleHashRoute {
   return `#/article/${slug}`;
 }
 
-export function caseStudyHashFromSlug(
+function caseStudyHashFromSlug(
   slug: CaseStudySlug,
 ): CaseStudyHashRoute {
   return `#/case-study/${slug}`;

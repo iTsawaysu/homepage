@@ -8,7 +8,7 @@ type BaffleElementState = {
   bitmap: number[];
 };
 
-export type NativeBaffleOptions = {
+type NativeBaffleOptions = {
   characters?: string;
   exclude?: string[];
   speed?: number;

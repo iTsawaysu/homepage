@@ -12,6 +12,10 @@ import {
   createNativeScrollWatcher,
   type NativeScrollWatcher,
 } from "./native-scroll-watcher";
+import {
+  installRouteLifecycle,
+  type RouteLifecycleBag,
+} from "./route-lifecycle";
 import { showNativeToaster } from "./toaster";
 
 type ContentPayload = {
@@ -44,12 +48,9 @@ type ContentPayload = {
 
 type NativeLifecycleMethod = (...args: unknown[]) => unknown;
 
-export type NativeLifecycleInstance = {
-  currentPage: string;
-  syncTime: number;
+export type NativeLifecycleInstance = RouteLifecycleBag & {
   caseStudies: ContentPayload["caseStudies"];
   articles: ContentPayload["articles"];
-  contentPayloadReady: boolean;
   ind?: number;
   nextInd: number;
   caseStudyItem?: ContentPayload["caseStudies"][number];
@@ -79,34 +80,29 @@ export type NativeLifecycleInstance = {
   destroyCaseStudyScrollMonitor(): void;
   createArticleScrollMonitor(): void;
   destroyArticleScrollMonitor(): void;
-  exitCurrentSlide: NativeLifecycleMethod;
-  switchSlide: NativeLifecycleMethod;
-  resetSlide: NativeLifecycleMethod;
-  enterHello: NativeLifecycleMethod;
-  enterAbout: NativeLifecycleMethod;
-  enterAchievements: NativeLifecycleMethod;
-  enterCoding: NativeLifecycleMethod;
-  enterDesign: NativeLifecycleMethod;
-  enterCaseStudy: NativeLifecycleMethod;
-  enterArticle: NativeLifecycleMethod;
-  enterContact: NativeLifecycleMethod;
-  enterError: NativeLifecycleMethod;
-  setActiveNav: NativeLifecycleMethod;
-  getCaseStudy: NativeLifecycleMethod;
-  getArticle: NativeLifecycleMethod;
 };
 
-export type NativeRuntimeHost = {
+type NativeRuntimeHost = {
   isReady(): boolean;
   lifecycle: NativeLifecycleInstance;
 };
 
-export const NATIVE_RUNTIME_READY_EVENT =
-  "homepage:native-runtime-ready";
+export const NATIVE_RUNTIME_READY_EVENT = "homepage:native-runtime-ready";
 
 declare global {
   interface Window {
     __homepageNativeRuntime?: NativeRuntimeHost;
+    /**
+     * Test-instrumentation seam — NOT dead code, do not remove.
+     * Production must use getRouteLifecycle(); this global exists so verify
+     * scripts can (a) read state-bag fields not exposed by getState()
+     * (nextCaseStudyItem/nextArticleItem/caseStudyWatcher/articleWatcher) and
+     * (b) install a defineProperty setter whose trigger is the assignment
+     * below — that setter wraps the bag's methods to record methodCalls/
+     * watcherEvents for slide-baseline & detail-retry gate assertions.
+     * Removing the assignment silently disables those probes.
+     */
+    __homepageLegacyLifecycle?: NativeLifecycleInstance;
   }
 }
 
@@ -115,7 +111,10 @@ const BAFFLE_OPTIONS = {
   speed: 40,
 } as const;
 
-const noop: NativeLifecycleMethod = () => undefined;
+/** Placeholder until installRouteLifecycle wires real implementations. */
+const unboundMethod: NativeLifecycleMethod = () => {
+  throw new Error("RouteLifecycle methods not wired yet");
+};
 
 const watcherForSelector = (selector: string): NativeScrollWatcher =>
   createNativeScrollWatcher(document.querySelectorAll(selector), -100);
@@ -216,17 +215,13 @@ const fetchContentPayload = async (
 const createLifecycle = (analytics: NativeAnalytics): NativeLifecycleInstance => {
   const lifecycle: NativeLifecycleInstance = {
     currentPage: "hello",
-    syncTime: 0.5,
     caseStudies: [],
     articles: [],
     contentPayloadReady: false,
     nextInd: 0,
     bHello: createNativeBaffle(".hello h1 .text", BAFFLE_OPTIONS),
     bAbout: createNativeBaffle(".about h1 .text", BAFFLE_OPTIONS),
-    bAchievements: createNativeBaffle(
-      ".achievements h1 .text",
-      BAFFLE_OPTIONS,
-    ),
+    bAchievements: createNativeBaffle(".achievements h1 .text", BAFFLE_OPTIONS),
     bCoding: createNativeBaffle(".coding h1 .text", BAFFLE_OPTIONS),
     bDesign: createNativeBaffle(".design h1 .text", BAFFLE_OPTIONS),
     bContact: createNativeBaffle(".contact h1 .text", BAFFLE_OPTIONS),
@@ -269,21 +264,22 @@ const createLifecycle = (analytics: NativeAnalytics): NativeLifecycleInstance =>
       this.articleWatcher?.destroy();
       this.articleWatcher = undefined;
     },
-    exitCurrentSlide: noop,
-    switchSlide: noop,
-    resetSlide: noop,
-    enterHello: noop,
-    enterAbout: noop,
-    enterAchievements: noop,
-    enterCoding: noop,
-    enterDesign: noop,
-    enterCaseStudy: noop,
-    enterArticle: noop,
-    enterContact: noop,
-    enterError: noop,
-    setActiveNav: noop,
-    getCaseStudy: noop,
-    getArticle: noop,
+    // Bound by installRouteLifecycle before any navigate.
+    exitCurrentSlide: unboundMethod,
+    switchSlide: unboundMethod,
+    resetSlide: unboundMethod,
+    enterHello: unboundMethod,
+    enterAbout: unboundMethod,
+    enterAchievements: unboundMethod,
+    enterCoding: unboundMethod,
+    enterDesign: unboundMethod,
+    enterCaseStudy: unboundMethod,
+    enterArticle: unboundMethod,
+    enterContact: unboundMethod,
+    enterError: unboundMethod,
+    setActiveNav: unboundMethod,
+    getCaseStudy: unboundMethod,
+    getArticle: unboundMethod,
   };
 
   return lifecycle;
@@ -298,14 +294,23 @@ export const initNativeRuntimeHost = (): NativeRuntimeHost => {
 
   const analytics = createNativeAnalytics();
   const lifecycle = createLifecycle(analytics);
+
+  // Wire methods + publish window.__homepageRouteLifecycle before ready.
+  installRouteLifecycle(lifecycle);
+
   const host: NativeRuntimeHost = {
     isReady: () => true,
     lifecycle,
   };
 
   window.__homepageNativeRuntime = host;
+  // Load-bearing test seam: verify-slide-lifecycle-baseline and
+  // verify-detail-retry-and-watchers install a defineProperty setter here and
+  // use THIS assignment to trigger wrapLifecycle() method-call instrumentation.
+  // Do not remove — getState() snapshots cannot carry the live method objects
+  // those probes wrap, and item/watcher fields (nextCaseStudyItem, watchers)
+  // are not exposed by getState(). See route-lifecycle.getState() for prod reads.
   window.__homepageLegacyLifecycle = lifecycle;
-  window.__homepageCaptureLegacyLifecycle?.(lifecycle);
   window.dispatchEvent(new Event(NATIVE_RUNTIME_READY_EVENT));
 
   analytics.init();
@@ -316,5 +321,3 @@ export const initNativeRuntimeHost = (): NativeRuntimeHost => {
   return host;
 };
 
-export const getNativeRuntimeHost = (): NativeRuntimeHost | null =>
-  window.__homepageNativeRuntime ?? null;

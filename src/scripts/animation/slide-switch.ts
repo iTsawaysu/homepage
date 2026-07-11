@@ -13,7 +13,6 @@ type SwitchSlideResult =
 
 type SwitchSlideLegacyState = {
   currentPage?: unknown;
-  syncTime?: unknown;
   caseStudyItem?: unknown;
   articleItem?: unknown;
   switchSlide?: (target: string) => unknown;
@@ -82,13 +81,9 @@ const removeHeaderRouteClasses = (): void => {
   document.querySelector(".header")?.classList.remove("dark", "hide", "shadow-z2");
 };
 
-const getSyncTime = (legacyState: SwitchSlideLegacyState): number => {
-  const syncTime = Number(legacyState.syncTime);
-
-  return Number.isFinite(syncTime) && syncTime >= 0
-    ? syncTime
-    : LEGACY_ANIMATION_TIMINGS.routeTransitionSeconds;
-};
+// MotionScale is the sole authority for route transition duration.
+const getSyncTime = (): number =>
+  LEGACY_ANIMATION_TIMINGS.routeTransitionSeconds;
 
 const normalizeTarget = (target: string): SwitchTarget => {
   if (target === "") {
@@ -221,7 +216,7 @@ export const runSwitchSlideLifecycle = (
       ? legacyState.currentPage
       : "hello";
   const target = normalizeTarget(rawTarget);
-  const syncTime = getSyncTime(legacyState);
+  const syncTime = getSyncTime();
 
   try {
     hideSection(previousPage);

@@ -1,6 +1,6 @@
 import { escapeLegacyHtml, renderLegacyRaw, renderLegacyTemplate } from "./html";
 
-export type ArticleTemplateData = {
+type ArticleTemplateData = {
   content: unknown;
   nextItem: {
     url: unknown;

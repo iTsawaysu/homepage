@@ -92,6 +92,7 @@ next-env.d.ts
 # Keep public releases focused on the site source, build config, public assets, and tests.
 .agents/
 .codex/
+.claude/
 .trellis/
 AGENTS.md
 CONTEXT.md

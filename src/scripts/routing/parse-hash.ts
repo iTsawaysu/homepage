@@ -1,7 +1,6 @@
 export {
   DEFAULT_HASH_ROUTE,
   ERROR_ROUTE_NAME,
-  LEGACY_PATHJS_ROUTE_PATTERNS,
   isStaticHashRoute,
   normalizeLegacyHashInput,
   parseLegacyHashRoute,

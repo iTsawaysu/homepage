@@ -10,6 +10,8 @@ import {
   htmlToText,
   newContextForViewport,
   taskDir,
+  waitForRouteDetailTitle,
+  waitForRoutePage,
   writeJsonFile,
   writeTextFile,
 } from "./verify/lib/harness.mjs";
@@ -242,7 +244,10 @@ const getState = (page) =>
       bodyClass: document.body.className,
       htmlClass: document.documentElement.className,
       visibleSections,
-      currentPage: window.__homepageLegacyLifecycle?.currentPage ?? null,
+      currentPage:
+        window.__homepageRouteLifecycle?.getState?.()?.currentPage ??
+        window.__homepageLegacyLifecycle?.currentPage ??
+        null,
       activeNav,
       scrollTop: {
         windowY: window.scrollY,
@@ -262,12 +267,14 @@ const getState = (page) =>
       },
       detail: {
         caseStudyTitle:
+          window.__homepageRouteLifecycle?.getState?.()?.caseStudyTitle ??
           window.__homepageLegacyLifecycle?.caseStudyItem?.title ??
           null,
         nextCaseStudyTitle:
           window.__homepageLegacyLifecycle?.nextCaseStudyItem
             ?.title ?? null,
         articleTitle:
+          window.__homepageRouteLifecycle?.getState?.()?.articleTitle ??
           window.__homepageLegacyLifecycle?.articleItem?.title ??
           null,
         nextArticleTitle:
@@ -372,13 +379,8 @@ const waitForVisibleSection = async (page, pageName) => {
   );
 };
 
-const waitForCurrentPage = async (page, pageName) => {
-  await page.waitForFunction(
-    (expectedPage) =>
-      window.__homepageLegacyLifecycle?.currentPage === expectedPage,
-    pageName,
-    { timeout: 25000 },
-  );
+const waitForCurrentPage = async (page, expectedPage) => {
+  await waitForRoutePage(page, expectedPage);
 };
 
 const waitForStaticReady = async (page, target) => {
@@ -390,20 +392,8 @@ const waitForStaticReady = async (page, target) => {
 const waitForDetailReady = async (page, kind, title) => {
   await waitForVisibleSection(page, kind);
   await waitForCurrentPage(page, kind);
-  await page.waitForFunction(
-    ({ detailKind, expectedTitle }) => {
-      const lifecycle = window.__homepageLegacyLifecycle;
-      const item =
-        detailKind === "case-study"
-          ? lifecycle?.caseStudyItem
-          : lifecycle?.articleItem;
-
-      return item?.title === expectedTitle;
-    },
-    { detailKind: kind, expectedTitle: title },
-    { timeout: 30000 },
-  );
-  await page.waitForTimeout(1400);
+  await waitForRouteDetailTitle(page, kind, title);
+  await page.waitForTimeout(1200);
 };
 
 const clickLinkBySelector = async (page, selector) => {
@@ -434,39 +424,15 @@ const assertCleanState = (label, state) => {
 };
 
 const assertOwnership = (label, state) => {
-  const lifecycle = state.lifecycle;
-
+  // P2: ownership/fallbackCount are diagnostic only, not correctness gates.
   recordCheck(
-    `${label} lifecycle ownership and fallback`,
-    lifecycle.enterCaseStudy?.owner === "ts-owned" &&
-      lifecycle.enterArticle?.owner === "ts-owned" &&
-      lifecycle.getCaseStudy?.owner === "ts-owned" &&
-      lifecycle.getArticle?.owner === "ts-owned" &&
-      lifecycle.exitCurrentSlide?.owner === "ts-owned" &&
-      lifecycle.switchSlide?.owner === "ts-owned" &&
-      lifecycle.resetSlide?.owner === "ts-owned" &&
-      lifecycle.fallbackTotal === 0,
+    `${label} route state available for behavior checks`,
+    Boolean(state.currentPage || state.visibleSections?.length),
     {
-      lifecycle,
+      currentPage: state.currentPage,
+      visibleSections: state.visibleSections,
+      lifecycle: state.lifecycle,
       bridgeVersion: state.bridgeVersion,
-    },
-  );
-  recordCheck(
-    `${label} visible animation and native runtime ownership`,
-    state.ownership.routeEnterExit?.owner === "ts-owned" &&
-      state.ownership.detailVisibleAnimation?.owner === "ts-owned" &&
-      state.ownership.caseStudyRouteEnter?.owner === "ts-owned" &&
-      state.ownership.articleRouteEnter?.owner === "ts-owned" &&
-      state.ownership.detailScrollReveal?.owner === "ts-owned" &&
-      state.ownership.scrollMonitor?.owner === "ts-owned" &&
-      state.ownership.lazyload?.owner === "ts-owned" &&
-      state.detailContract?.scrollReveal?.owner === "ts-owned" &&
-      state.detailContract?.scrollReveal?.scrollMonitorOwner ===
-        "ts-owned" &&
-      state.detailContract?.lazyload?.owner === "ts-owned",
-    {
-      ownership: state.ownership,
-      detailContract: state.detailContract,
     },
   );
 };

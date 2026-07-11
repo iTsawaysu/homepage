@@ -4,26 +4,23 @@
   <img src="./public/preview.png" alt="homepage 预览" width="900">
 </p>
 
-一个开源的个人主页项目，用来展示我的个人介绍、项目、文章和案例内容；项目基于 Astro 静态构建。
+**iTsawaysu** 的开源个人主页：展示个人介绍、项目、文章与案例；基于 Astro 静态构建。
 
-## 在线预览
-
-可以直接打开线上预览查看当前页面效果：[https://homepage-three-wheat.vercel.app/](https://homepage-three-wheat.vercel.app/)
+**在线预览：** [https://homepage-three-wheat.vercel.app/](https://homepage-three-wheat.vercel.app/)
 
 ## 功能
 
-- 个人介绍、项目展示、文章列表和案例详情。
-- 静态构建输出，部署简单。
-- Markdown 维护文章内容。
-- JSON 维护案例内容。
-- Hash route 导航，适合紧凑的单页主页体验。
+- 个人介绍、项目展示、文章列表和案例详情
+- 静态构建，部署简单
+- Markdown 维护文章，JSON 维护案例
+- Hash route 导航，适合紧凑的单页主页体验
 
 ## 技术栈
 
 - Astro
 - TypeScript
 - GSAP
-- Playwright
+- Playwright（本地验证）
 
 ## 快速开始
 
@@ -32,7 +29,7 @@ npm install
 npm run dev
 ```
 
-打开：
+本地地址：
 
 ```text
 http://127.0.0.1:5174
@@ -54,9 +51,11 @@ http://127.0.0.1:5174
 
 | 命令 | 说明 |
 | --- | --- |
-| `npm run dev` | 启动本地 Astro 开发服务器。 |
-| `npm run build` | 类型检查并构建静态站点到 `dist/`。 |
-| `npm run preview` | 本地预览构建后的站点。 |
+| `npm run dev` | 启动本地 Astro 开发服务器 |
+| `npm run build` | 类型检查并构建静态站点到 `dist/` |
+| `npm run preview` | 本地预览构建后的站点 |
+| `npm run check` | 仅做类型 / Astro 检查 |
+| `npm run check:assets` | 检查静态资源引用 |
 
 ## 部署
 
@@ -64,7 +63,7 @@ http://127.0.0.1:5174
 npm run build
 ```
 
-将生成的 `dist/` 目录部署到静态托管服务即可。
+将生成的 `dist/` 目录部署到任意静态托管即可。
 
 ## 许可证
 

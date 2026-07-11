@@ -26,8 +26,3 @@ export const tweenNumericText = (
   });
 };
 
-export const stopElementTweens = (
-  target: Element | Element[] | NodeListOf<Element> | string,
-) => {
-  getGsapEngine().killTweensOf(target);
-};

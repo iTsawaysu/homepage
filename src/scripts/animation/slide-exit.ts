@@ -21,6 +21,13 @@ type ExitSlideLegacyState = {
 const GENERIC_DESCRIPTION =
   "I'm Jianda Sun，主要写 Java 后端；平时跟 Spring、数据库、接口和日志打交道，偶尔也会被配置文件教育一下，重启好了就当是自己修的；最近也没少 Vibe Coding，简单说就是我和 AI 一起写代码，它负责自信地生成，我负责半信半疑地改到能跑。";
 
+const EXIT_DURATION = LEGACY_ANIMATION_TIMINGS.routeExitDurationSeconds;
+const EXIT_STEP = LEGACY_ANIMATION_TIMINGS.routeExitDelayStepSeconds;
+const EXIT_STAGGER = LEGACY_ANIMATION_TIMINGS.routeExitStaggerSeconds;
+
+const exitFallbackMs = (delaySeconds: number): number =>
+  Math.round((EXIT_DURATION + delaySeconds) * 1000);
+
 const queryTargets = (selector: string): Element[] =>
   Array.from(document.querySelectorAll(selector));
 
@@ -97,36 +104,32 @@ const clearNominationStyles = (): void => {
 };
 
 const runCommonExitTweens = (currentPage: string): void => {
-  if (currentPage === "case-study" && (currentPage as string) === "article") {
-    return;
-  }
-
   toIfPresent(`.${currentPage} h1`, {
     opacity: 0,
     y: -50,
-    duration: 0.5,
+    duration: EXIT_DURATION,
     ease: "expo.inOut",
   });
   toIfPresent(`.${currentPage} p`, {
     opacity: 0,
     y: -50,
-    duration: 0.5,
+    duration: EXIT_DURATION,
     ease: "expo.inOut",
-    delay: 0.1,
+    delay: EXIT_STEP,
   });
   toIfPresent(`.${currentPage} h2`, {
     opacity: 0,
     y: -50,
-    duration: 0.5,
+    duration: EXIT_DURATION,
     ease: "expo.inOut",
-    delay: 0.1,
+    delay: EXIT_STEP,
   });
   toIfPresent(`.${currentPage} hr`, {
     opacity: 0,
     y: -50,
-    duration: 0.5,
+    duration: EXIT_DURATION,
     ease: "expo.inOut",
-    delay: 0.2,
+    delay: EXIT_STEP * 2,
   });
 };
 
@@ -149,13 +152,13 @@ export const runExitCurrentSlideLifecycle = (
           {
             opacity: 0,
             y: -50,
-            duration: 0.5,
+            duration: EXIT_DURATION,
             ease: "expo.inOut",
-            delay: 0.2,
+            delay: EXIT_STEP * 2,
             clearProps: "all",
-            stagger: 0.1,
+            stagger: EXIT_STAGGER,
           },
-          700,
+          exitFallbackMs(EXIT_STEP * 2),
           () => callSwitchSlide(legacyState, target),
         );
         break;
@@ -163,24 +166,24 @@ export const runExitCurrentSlideLifecycle = (
         toIfPresent(".skills__bar", {
           opacity: 0,
           y: -50,
-          duration: 0.5,
+          duration: EXIT_DURATION,
           ease: "expo.inOut",
-          delay: 0.2,
+          delay: EXIT_STEP * 2,
           clearProps: "all",
-          stagger: 0.1,
+          stagger: EXIT_STAGGER,
         });
         runAfterTween(
           ".logos li",
           {
             opacity: 0,
             y: -50,
-            duration: 0.5,
+            duration: EXIT_DURATION,
             ease: "expo.inOut",
-            delay: 0.2,
+            delay: EXIT_STEP * 2,
             clearProps: "all",
-            stagger: 0.1,
+            stagger: EXIT_STAGGER,
           },
-          700,
+          exitFallbackMs(EXIT_STEP * 2),
           () => callSwitchSlide(legacyState, target),
         );
         break;
@@ -190,43 +193,43 @@ export const runExitCurrentSlideLifecycle = (
           {
             opacity: 0,
             y: -50,
-            duration: 0.5,
+            duration: EXIT_DURATION,
             ease: "expo.inOut",
-            delay: 0.2,
-            stagger: 0.1,
+            delay: EXIT_STEP * 2,
+            stagger: EXIT_STAGGER,
           },
-          700,
+          exitFallbackMs(EXIT_STEP * 2),
           clearNominationStyles,
         );
         toIfPresent(".achievements .link", {
           opacity: 0,
           y: -50,
-          duration: 0.5,
+          duration: EXIT_DURATION,
           ease: "expo.inOut",
-          delay: 0.2,
+          delay: EXIT_STEP * 2,
           clearProps: "all",
         });
         toIfPresent(".ribbons li", {
           opacity: 0,
           y: -50,
-          duration: 0.5,
+          duration: EXIT_DURATION,
           ease: "expo.inOut",
-          delay: 0.2,
+          delay: EXIT_STEP * 2,
           clearProps: "all",
-          stagger: 0.1,
+          stagger: EXIT_STAGGER,
         });
         runAfterTween(
           ".listing li",
           {
             opacity: 0,
             y: -50,
-            duration: 0.5,
+            duration: EXIT_DURATION,
             ease: "expo.inOut",
-            delay: 0.2,
+            delay: EXIT_STEP * 2,
             clearProps: "all",
-            stagger: 0.1,
+            stagger: EXIT_STAGGER,
           },
-          700,
+          exitFallbackMs(EXIT_STEP * 2),
           () => callSwitchSlide(legacyState, target),
         );
         break;
@@ -236,13 +239,13 @@ export const runExitCurrentSlideLifecycle = (
           {
             opacity: 0,
             y: -50,
-            duration: 0.5,
+            duration: EXIT_DURATION,
             ease: "expo.inOut",
-            delay: 0.2,
+            delay: EXIT_STEP * 2,
             clearProps: "all",
-            stagger: 0.1,
+            stagger: EXIT_STAGGER,
           },
-          700,
+          exitFallbackMs(EXIT_STEP * 2),
           () => callSwitchSlide(legacyState, target),
         );
         break;
@@ -252,13 +255,13 @@ export const runExitCurrentSlideLifecycle = (
           {
             opacity: 0,
             y: -50,
-            duration: 0.5,
+            duration: EXIT_DURATION,
             ease: "expo.inOut",
-            delay: 0.2,
+            delay: EXIT_STEP * 2,
             clearProps: "all",
-            stagger: 0.1,
+            stagger: EXIT_STAGGER,
           },
-          700,
+          exitFallbackMs(EXIT_STEP * 2),
           () => callSwitchSlide(legacyState, target),
         );
         break;
@@ -269,11 +272,11 @@ export const runExitCurrentSlideLifecycle = (
           {
             opacity: 0,
             y: -50,
-            duration: 0.5,
+            duration: EXIT_DURATION,
             ease: "expo.inOut",
-            delay: 0.2,
+            delay: EXIT_STEP * 2,
           },
-          700,
+          exitFallbackMs(EXIT_STEP * 2),
           () => callSwitchSlide(legacyState, target),
         );
         break;
@@ -285,11 +288,11 @@ export const runExitCurrentSlideLifecycle = (
           {
             opacity: 0,
             y: -50,
-            duration: 0.5,
+            duration: EXIT_DURATION,
             ease: "expo.inOut",
-            delay: 0.2,
+            delay: EXIT_STEP * 2,
           },
-          700,
+          exitFallbackMs(EXIT_STEP * 2),
           () => callSwitchSlide(legacyState, target),
         );
         break;
@@ -299,13 +302,13 @@ export const runExitCurrentSlideLifecycle = (
           {
             opacity: 0,
             y: -50,
-            duration: 0.5,
+            duration: EXIT_DURATION,
             ease: "expo.inOut",
-            delay: 0.3,
+            delay: LEGACY_ANIMATION_TIMINGS.contactIconExitDelaySeconds,
             clearProps: "all",
-            stagger: 0.1,
+            stagger: EXIT_STAGGER,
           },
-          800,
+          exitFallbackMs(LEGACY_ANIMATION_TIMINGS.contactIconExitDelaySeconds),
           () => callSwitchSlide(legacyState, target),
         );
         break;

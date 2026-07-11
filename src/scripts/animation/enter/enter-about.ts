@@ -1,43 +1,41 @@
+/**
+ * Specialized about enter — algorithm unchanged; shared helpers only (P4).
+ */
+
 import {
   ABOUT_BRANCH_CONTRACT,
   ABOUT_CONTRACT_SELECTORS,
   ABOUT_ROUTE_ENTER_TIMINGS,
-} from "./about-contract";
-import { tweenNumericText } from "./effects";
-import { getGsapEngine } from "./gsap";
-import { LEGACY_SKILLS_COUNT_CONTRACT } from "./skills-contract";
-import { prepareLegacyTitleReveal } from "./title-reveal";
+} from "../about-contract";
+import { tweenNumericText } from "../effects";
+import { getGsapEngine } from "../gsap";
+import { LEGACY_SKILLS_COUNT_CONTRACT } from "../skills-contract";
+import { prepareLegacyTitleReveal } from "../title-reveal";
+import {
+  type EnterAnimationFailure,
+  type EnterAnimationOptions,
+  type EnterAnimationResult,
+  type LegacyBaffleInstance,
+  type LegacyScrollWatcher,
+  failResult,
+  getErrorMessage,
+  getRequiredElement,
+  getRequiredElements,
+  hasBaffleApi,
+  hasScrollWatcherApi,
+  isFailure,
+  isObjectRecord,
+  okResult,
+} from "./runner";
 
-type LegacyBaffleInstance = {
-  start: () => unknown;
-  reveal: (durationMs: number, delayMs: number) => unknown;
-};
-
-type LegacyScrollWatcher = {
-  enterViewport: (callback: () => void) => unknown;
-};
-
-type EnterAboutLegacyState = {
+export type EnterAboutLegacyState = {
   bAbout?: unknown;
   bSkillsLabel?: unknown;
   skillsWatcher?: unknown;
   logosWatcher?: unknown;
 };
 
-type EnterAboutAnimationFailure = {
-  ok: false;
-  reason: string;
-};
-
-export type EnterAboutAnimationResult =
-  | {
-      ok: true;
-    }
-  | EnterAboutAnimationFailure;
-
-type EnterAboutAnimationOptions = {
-  onAsyncFallback: (reason: string) => void;
-};
+type EnterAboutAnimationResult = EnterAnimationResult;
 
 type SkillTarget = {
   bar: HTMLElement;
@@ -47,66 +45,14 @@ type SkillTarget = {
   labelBaffle: LegacyBaffleInstance;
 };
 
-const getRequiredElement = <T extends Element>(
-  selector: string,
-): T | EnterAboutAnimationFailure => {
-  const element = document.querySelector<T>(selector);
-
-  if (!element) {
-    return {
-      ok: false,
-      reason: `dom-missing:${selector}`,
-    };
-  }
-
-  return element;
-};
-
-const getRequiredElements = <T extends Element>(
-  selector: string,
-): T[] | EnterAboutAnimationFailure => {
-  const elements = Array.from(document.querySelectorAll<T>(selector));
-
-  if (elements.length === 0) {
-    return {
-      ok: false,
-      reason: `dom-missing:${selector}`,
-    };
-  }
-
-  return elements;
-};
-
-const isFailure = <T extends object>(
-  value: T | EnterAboutAnimationFailure,
-): value is EnterAboutAnimationFailure =>
-  "ok" in value && value.ok === false;
-
-const isObjectRecord = (value: unknown): value is Record<string, unknown> =>
-  (typeof value === "object" && value !== null) || typeof value === "function";
-
-const hasBaffleApi = (value: unknown): value is LegacyBaffleInstance =>
-  isObjectRecord(value) &&
-  typeof value.start === "function" &&
-  typeof value.reveal === "function";
-
-const hasScrollWatcherApi = (value: unknown): value is LegacyScrollWatcher =>
-  isObjectRecord(value) && typeof value.enterViewport === "function";
-
-const getErrorMessage = (error: unknown): string =>
-  error instanceof Error ? error.message : String(error);
-
 const getLegacyWatcher = (
   legacyState: EnterAboutLegacyState,
   key: "skillsWatcher" | "logosWatcher",
-): LegacyScrollWatcher | EnterAboutAnimationFailure => {
+): LegacyScrollWatcher | EnterAnimationFailure => {
   const watcher = legacyState[key];
 
-  if (!hasScrollWatcherApi(watcher)) {
-    return {
-      ok: false,
-      reason: `scroll-watcher-missing:${key}`,
-    };
+  if (!hasScrollWatcherApi(watcher, "enterViewport")) {
+    return failResult(`scroll-watcher-missing:${key}`);
   }
 
   return watcher;
@@ -115,14 +61,11 @@ const getLegacyWatcher = (
 const getLegacyBaffleArray = (
   legacyState: EnterAboutLegacyState,
   expectedLength: number,
-): LegacyBaffleInstance[] | EnterAboutAnimationFailure => {
+): LegacyBaffleInstance[] | EnterAnimationFailure => {
   const rawBaffles = legacyState.bSkillsLabel;
 
   if (!isObjectRecord(rawBaffles)) {
-    return {
-      ok: false,
-      reason: "baffle-missing:bSkillsLabel",
-    };
+    return failResult("baffle-missing:bSkillsLabel");
   }
 
   const length =
@@ -132,18 +75,12 @@ const getLegacyBaffleArray = (
   const baffles = Array.from({ length }, (_, index) => rawBaffles[index]);
 
   if (baffles.length < expectedLength) {
-    return {
-      ok: false,
-      reason: "baffle-count-mismatch:bSkillsLabel",
-    };
+    return failResult("baffle-count-mismatch:bSkillsLabel");
   }
 
   for (let index = 0; index < expectedLength; index += 1) {
     if (!hasBaffleApi(baffles[index])) {
-      return {
-        ok: false,
-        reason: `baffle-missing:bSkillsLabel:${index}`,
-      };
+      return failResult(`baffle-missing:bSkillsLabel:${index}`);
     }
   }
 
@@ -153,7 +90,7 @@ const getLegacyBaffleArray = (
 const getSkillTargets = (
   bars: HTMLElement[],
   legacyState: EnterAboutLegacyState,
-): SkillTarget[] | EnterAboutAnimationFailure => {
+): SkillTarget[] | EnterAnimationFailure => {
   const labelBaffles = getLegacyBaffleArray(legacyState, bars.length);
 
   if (isFailure(labelBaffles)) {
@@ -173,24 +110,19 @@ const getSkillTargets = (
     const percent = Number.parseFloat(percentRaw ?? "");
 
     if (!label) {
-      return {
-        ok: false,
-        reason: `dom-missing:${ABOUT_CONTRACT_SELECTORS.skillsLabel}:${index}`,
-      };
+      return failResult(
+        `dom-missing:${ABOUT_CONTRACT_SELECTORS.skillsLabel}:${index}`,
+      );
     }
 
     if (!percentNumber) {
-      return {
-        ok: false,
-        reason: `dom-missing:${ABOUT_CONTRACT_SELECTORS.skillPercentNumber}:${index}`,
-      };
+      return failResult(
+        `dom-missing:${ABOUT_CONTRACT_SELECTORS.skillPercentNumber}:${index}`,
+      );
     }
 
     if (!Number.isFinite(percent)) {
-      return {
-        ok: false,
-        reason: `invalid-skill-percent:${index}`,
-      };
+      return failResult(`invalid-skill-percent:${index}`);
     }
 
     skillTargets.push({
@@ -211,7 +143,7 @@ const isMobileBranch = (): boolean =>
 
 const revealLegacyBaffle = (
   baffle: LegacyBaffleInstance,
-): EnterAboutAnimationResult => {
+): EnterAnimationResult => {
   try {
     const startedBaffle = baffle.start();
     const revealTarget = hasBaffleApi(startedBaffle) ? startedBaffle : baffle;
@@ -221,21 +153,16 @@ const revealLegacyBaffle = (
       ABOUT_ROUTE_ENTER_TIMINGS.titleBaffle.revealDelayMs,
     );
 
-    return {
-      ok: true,
-    };
+    return okResult();
   } catch (error) {
-    return {
-      ok: false,
-      reason: `baffle-error:${getErrorMessage(error)}`,
-    };
+    return failResult(`baffle-error:${getErrorMessage(error)}`);
   }
 };
 
 const runNativeSkillCount = (
   percentNumber: HTMLElement,
   percent: number,
-): EnterAboutAnimationResult => {
+): EnterAnimationResult => {
   try {
     tweenNumericText(percentNumber, {
       from: 0,
@@ -244,14 +171,9 @@ const runNativeSkillCount = (
       decimals: LEGACY_SKILLS_COUNT_CONTRACT.decimals,
     });
 
-    return {
-      ok: true,
-    };
+    return okResult();
   } catch (error) {
-    return {
-      ok: false,
-      reason: `countTo-error:${getErrorMessage(error)}`,
-    };
+    return failResult(`countTo-error:${getErrorMessage(error)}`);
   }
 };
 
@@ -260,7 +182,7 @@ const animateSkills = (
   timings:
     | typeof ABOUT_ROUTE_ENTER_TIMINGS.mobile
     | typeof ABOUT_ROUTE_ENTER_TIMINGS.nonMobile,
-  options: EnterAboutAnimationOptions,
+  options: EnterAnimationOptions,
 ): void => {
   const gsap = getGsapEngine();
   const barDelayStep =
@@ -301,7 +223,7 @@ const animateSkills = (
 
 export const runEnterAboutAnimation = (
   legacyState: EnterAboutLegacyState,
-  options: EnterAboutAnimationOptions,
+  options: EnterAnimationOptions,
 ): EnterAboutAnimationResult => {
   const bar = getRequiredElement<HTMLElement>(ABOUT_CONTRACT_SELECTORS.bar);
   const icon = getRequiredElement<HTMLElement>(
@@ -412,7 +334,7 @@ export const runEnterAboutAnimation = (
       return logosWatcher;
     }
 
-    skillsWatcher.enterViewport(() => {
+    skillsWatcher.enterViewport?.(() => {
       gsap.to(heading, {
         opacity: 1,
         y: 0,
@@ -430,7 +352,7 @@ export const runEnterAboutAnimation = (
       animateSkills(skillTargets, ABOUT_ROUTE_ENTER_TIMINGS.mobile, options);
     });
 
-    logosWatcher.enterViewport(() => {
+    logosWatcher.enterViewport?.(() => {
       gsap.to(rule, {
         width: "100%",
         duration: ABOUT_ROUTE_ENTER_TIMINGS.mobile.rule.durationSeconds,
@@ -495,7 +417,5 @@ export const runEnterAboutAnimation = (
     });
   }
 
-  return {
-    ok: true,
-  };
+  return okResult();
 };

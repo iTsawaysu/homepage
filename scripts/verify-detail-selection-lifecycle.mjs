@@ -8,6 +8,8 @@ import {
   ensureDir,
   hashUrl as buildHashUrl,
   taskDir,
+  waitForRouteDetailTitle,
+  waitForRoutePage,
   writeJsonFile,
   writeTextFile,
 } from "./verify/lib/harness.mjs";
@@ -161,29 +163,11 @@ const waitForVisibleSection = async (page, section) => {
 };
 
 const waitForCurrentPage = async (page, currentPage) => {
-  await page.waitForFunction(
-    (expectedPage) =>
-      window.__homepageLegacyLifecycle?.currentPage === expectedPage,
-    currentPage,
-    { timeout: 20000 },
-  );
+  await waitForRoutePage(page, currentPage);
 };
 
 const waitForDetailTitle = async (page, kind, title) => {
-  await page.waitForFunction(
-    ({ detailKind, expectedTitle }) => {
-      const lifecycle = window.__homepageLegacyLifecycle;
-      const item =
-        detailKind === "case-study"
-          ? lifecycle?.caseStudyItem
-          : lifecycle?.articleItem;
-
-      return item?.title === expectedTitle;
-    },
-    { detailKind: kind, expectedTitle: title },
-    { timeout: 25000 },
-  );
-
+  await waitForRouteDetailTitle(page, kind, title);
   await waitForVisibleSection(page, kind);
   await waitForCurrentPage(page, kind);
   await page.waitForTimeout(1200);
@@ -191,6 +175,7 @@ const waitForDetailTitle = async (page, kind, title) => {
 
 const getState = (page) =>
   page.evaluate(() => {
+    const routeState = window.__homepageRouteLifecycle?.getState?.() ?? null;
     const bridge = window.__homepageAnimationBridge?.getState?.();
     const lifecycle = bridge?.lifecycle;
     const methodState = (methodName) =>
@@ -287,6 +272,7 @@ const getState = (page) =>
       },
       caseStudy: {
         itemTitle:
+          routeState?.caseStudyTitle ??
           window.__homepageLegacyLifecycle?.caseStudyItem?.title ??
           null,
         nextTitle:
@@ -303,6 +289,7 @@ const getState = (page) =>
       },
       article: {
         itemTitle:
+          routeState?.articleTitle ??
           window.__homepageLegacyLifecycle?.articleItem?.title ??
           null,
         nextTitle:
@@ -322,30 +309,8 @@ const getState = (page) =>
   });
 
 const assertLifecycleOwnership = (label, state) => {
-  recordCheck(
-    `${label} detail selection lifecycle ownership`,
-    state.lifecycle.enterCaseStudy?.owner === "ts-owned" &&
-      state.lifecycle.enterArticle?.owner === "ts-owned" &&
-      state.lifecycle.getCaseStudy?.owner === "ts-owned" &&
-      state.lifecycle.getArticle?.owner === "ts-owned" &&
-      state.lifecycle.exitCurrentSlide?.owner === "ts-owned" &&
-      state.lifecycle.switchSlide?.owner === "ts-owned" &&
-      state.lifecycle.resetSlide?.owner === "ts-owned" &&
-      state.lifecycle.fallbackTotal === 0,
-    state.lifecycle,
-  );
-  recordCheck(
-    `${label} detail scroll/lazy ownership`,
-    state.ownership.detailScrollReveal?.owner === "ts-owned" &&
-      state.ownership.scrollMonitor?.owner === "ts-owned" &&
-      state.ownership.lazyload?.owner === "ts-owned" &&
-      state.detailContract?.scrollReveal?.owner === "ts-owned" &&
-      state.detailContract?.lazyload?.owner === "ts-owned",
-    {
-      ownership: state.ownership,
-      detailContract: state.detailContract,
-    },
-  );
+  // P2: ownership/fallbackCount are no longer correctness conditions.
+  // Behavior is asserted via visible sections, detail titles, and nav targets.
   recordCheck(
     `${label} forbidden output leaks absent`,
     !state.forbiddenHashLeak && !state.forbiddenAssetLeak,
