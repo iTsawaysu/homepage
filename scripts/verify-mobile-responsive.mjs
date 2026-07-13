@@ -9,18 +9,21 @@ import {
   newContextForViewport,
   sleep,
   taskDir,
+  waitForRoutePage,
   writeJsonFile,
   writeTextFile,
 } from "./verify/lib/harness.mjs";
 
 const BASE_URL = process.env.MOBILE_VERIFY_BASE_URL ?? "http://127.0.0.1:5174";
-const TASK_DIR = taskDir(".trellis/tasks/07-10-mobile-responsive-adaptation");
+const TASK_DIR = taskDir(".trellis/tasks/07-13-mobile-verification-reliability");
 const RUN_ID = createRunId();
 const OUT_DIR = path.join(TASK_DIR, "research", `mobile-responsive-verification-${RUN_ID}`);
 
 const MOBILE_PORTRAIT = [
   { name: "mobile-320x568", width: 320, height: 568, isMobile: true, hasTouch: true },
   { name: "mobile-360x800", width: 360, height: 800, isMobile: true, hasTouch: true },
+  { name: "mobile-379x844", width: 379, height: 844, isMobile: true, hasTouch: true },
+  { name: "mobile-380x844", width: 380, height: 844, isMobile: true, hasTouch: true },
   { name: "mobile-390x844", width: 390, height: 844, isMobile: true, hasTouch: true },
   { name: "mobile-430x932", width: 430, height: 932, isMobile: true, hasTouch: true },
   { name: "mobile-767x900", width: 767, height: 900, isMobile: true, hasTouch: true },
@@ -55,19 +58,91 @@ const ROUTES = [
 ];
 
 const OVERFLOW_TOLERANCE = 1;
+const ROUTE_MINIMUM_SETTLE_MS = 1100;
+const STABLE_SAMPLE_COUNT = 3;
+const STABLE_SAMPLE_INTERVAL_MS = 100;
+const STABLE_VIEWPORT_TIMEOUT_MS = 5000;
+
+const MOBILE_320 = MOBILE_PORTRAIT.find((viewport) => viewport.width === 320);
+const MOBILE_390 = MOBILE_PORTRAIT.find((viewport) => viewport.width === 390);
+const TABLET_768 = ADJACENCY.find((viewport) => viewport.width === 768);
+const DESKTOP_1440 = DESKTOP.find((viewport) => viewport.width === 1440);
+
+if (!MOBILE_320 || !MOBILE_390 || !TABLET_768 || !DESKTOP_1440) {
+  throw new Error("Required responsive verification viewport is missing");
+}
 
 const hashUrl = (hash) => `${BASE_URL}/${hash}`;
 
 const gotoRoute = async (page, hash) => {
   await page.goto(hashUrl(hash), { waitUntil: "domcontentloaded" });
-  await sleep(900);
+  const route = ROUTES.find((candidate) => candidate.hash === hash);
+
+  if (route) {
+    await waitForRoutePage(page, route.page);
+  }
+
+  await page.evaluate(async () => {
+    await document.fonts?.ready;
+  });
+  await sleep(ROUTE_MINIMUM_SETTLE_MS);
 };
 
-const measureOverflow = (page) =>
-  page.evaluate(() => ({
+const measureViewport = (page, requestedWidth) =>
+  page.evaluate((expectedWidth) => ({
+    requestedWidth: expectedWidth,
     scrollWidth: document.documentElement.scrollWidth,
+    clientWidth: document.documentElement.clientWidth,
     innerWidth: window.innerWidth,
-  }));
+    visualViewportWidth: window.visualViewport?.width ?? null,
+  }), requestedWidth);
+
+const closeToRequestedWidth = (value, requestedWidth) =>
+  Math.abs(value - requestedWidth) <= OVERFLOW_TOLERANCE;
+
+const isConvergedViewport = (measurement) =>
+  closeToRequestedWidth(measurement.clientWidth, measurement.requestedWidth) &&
+  closeToRequestedWidth(measurement.innerWidth, measurement.requestedWidth) &&
+  (measurement.visualViewportWidth === null ||
+    closeToRequestedWidth(
+      measurement.visualViewportWidth,
+      measurement.requestedWidth,
+    )) &&
+  measurement.scrollWidth <=
+    measurement.requestedWidth + OVERFLOW_TOLERANCE;
+
+const waitForStableViewport = async (page, requestedWidth) => {
+  const startedAt = Date.now();
+  let consecutiveSamples = 0;
+  let lastMeasurement = await measureViewport(page, requestedWidth);
+
+  while (Date.now() - startedAt < STABLE_VIEWPORT_TIMEOUT_MS) {
+    lastMeasurement = await measureViewport(page, requestedWidth);
+    consecutiveSamples = isConvergedViewport(lastMeasurement)
+      ? consecutiveSamples + 1
+      : 0;
+
+    if (consecutiveSamples >= STABLE_SAMPLE_COUNT) {
+      return {
+        ...lastMeasurement,
+        settled: true,
+        consecutiveSamples,
+        sampleIntervalMs: STABLE_SAMPLE_INTERVAL_MS,
+        elapsedMs: Date.now() - startedAt,
+      };
+    }
+
+    await sleep(STABLE_SAMPLE_INTERVAL_MS);
+  }
+
+  return {
+    ...lastMeasurement,
+    settled: false,
+    consecutiveSamples,
+    sampleIntervalMs: STABLE_SAMPLE_INTERVAL_MS,
+    elapsedMs: Date.now() - startedAt,
+  };
+};
 
 const runOverflowChecks = async (browserName, browser, viewport, recordCheck, events) => {
   const context = await newContextForViewport(browser, viewport);
@@ -75,11 +150,11 @@ const runOverflowChecks = async (browserName, browser, viewport, recordCheck, ev
 
   for (const route of ROUTES) {
     await gotoRoute(page, route.hash);
-    const { scrollWidth, innerWidth } = await measureOverflow(page);
+    const measurement = await waitForStableViewport(page, viewport.width);
     recordCheck(
-      `${browserName} ${viewport.name} ${route.hash} no horizontal overflow`,
-      scrollWidth <= innerWidth + OVERFLOW_TOLERANCE,
-      { scrollWidth, innerWidth },
+      `${browserName} ${viewport.name} ${route.hash} stable viewport has no horizontal overflow`,
+      measurement.settled && isConvergedViewport(measurement),
+      measurement,
     );
   }
 
@@ -92,10 +167,10 @@ const runWechatOverflowCheck = async (browserName, browser, viewport, recordChec
 
   await gotoRoute(page, "#/contact/");
 
-  const closed = await measureOverflow(page);
+  const closed = await waitForStableViewport(page, viewport.width);
   recordCheck(
     `${browserName} ${viewport.name} contact wechat-card CLOSED no overflow`,
-    closed.scrollWidth <= closed.innerWidth + OVERFLOW_TOLERANCE,
+    closed.settled && isConvergedViewport(closed),
     closed,
   );
 
@@ -105,52 +180,558 @@ const runWechatOverflowCheck = async (browserName, browser, viewport, recordChec
   });
   await sleep(400);
 
-  const open = await measureOverflow(page);
+  const open = await waitForStableViewport(page, viewport.width);
   recordCheck(
     `${browserName} ${viewport.name} contact wechat-card OPEN no overflow`,
-    open.scrollWidth <= open.innerWidth + OVERFLOW_TOLERANCE,
+    open.settled && isConvergedViewport(open),
     open,
   );
 
   await context.close();
 };
 
-const runAchievementsGridCheck = async (browserName, browser, viewport, recordCheck, events) => {
+const runAchievementsLayoutCheck = async (
+  browserName,
+  browser,
+  viewport,
+  recordCheck,
+  events,
+) => {
   const context = await newContextForViewport(browser, viewport);
   const page = await createHarnessPage(context, viewport, events, { baseUrl: BASE_URL });
 
   await gotoRoute(page, "#/achievements/");
-  // Measure after reveal settles; mid-animation frames under-count columns.
   await page.evaluate(() => {
     document.querySelector(".achievements .nominations")?.scrollIntoView();
   });
-  await sleep(2600);
+  await page.waitForFunction(
+    () => {
+      const items = Array.from(
+        document.querySelectorAll(".achievements .nominations li"),
+      ).filter((item) => getComputedStyle(item).display !== "none");
+      return items.length > 0 && items.every((item) => {
+        const title = item.querySelector(".title");
+        return item.classList.contains("init") &&
+          title &&
+          Number(getComputedStyle(title).opacity) > 0.9999;
+      });
+    },
+    undefined,
+    { timeout: 8000 },
+  );
+  await page.evaluate(() => {
+    document.querySelector(".achievements .ribbons")?.scrollIntoView();
+  });
+  await page.waitForFunction(
+    () => {
+      const items = Array.from(
+        document.querySelectorAll(".achievements .ribbons li"),
+      );
+      return items.length > 0 && items.every((item) => {
+        const style = getComputedStyle(item);
+        const transform = style.transform;
+        const translateY = transform === "none"
+          ? 0
+          : new DOMMatrixReadOnly(transform).m42;
+        return Number(style.opacity) > 0.9999 && Math.abs(translateY) <= 0.05;
+      });
+    },
+    undefined,
+    { timeout: 8000 },
+  );
 
   const data = await page.evaluate(() => {
-    const items = Array.from(document.querySelectorAll(".achievements .nominations li"));
-    const visible = items.filter((li) => {
-      const r = li.getBoundingClientRect();
-      const s = getComputedStyle(li);
-      return s.display !== "none" && r.width > 0;
+    const visibleElements = (selector) =>
+      Array.from(document.querySelectorAll(selector)).filter((element) => {
+        const rect = element.getBoundingClientRect();
+        const style = getComputedStyle(element);
+        return style.display !== "none" && rect.width > 0 && rect.height > 0;
+      });
+    const rectFor = (element) => {
+      const rect = element.getBoundingClientRect();
+      return {
+        left: Math.round(rect.left * 10) / 10,
+        top: Math.round(rect.top * 10) / 10,
+        width: Math.round(rect.width * 10) / 10,
+        height: Math.round(rect.height * 10) / 10,
+      };
+    };
+    const groupRows = (rects) => {
+      const rows = [];
+
+      rects.forEach((rect) => {
+        const row = rows.find(
+          (candidate) => Math.abs(candidate[0].top - rect.top) <= 1,
+        );
+
+        if (row) {
+          row.push(rect);
+          return;
+        }
+
+        rows.push([rect]);
+      });
+
+      return rows.map((row) => row.sort((a, b) => a.left - b.left));
+    };
+    const followsDomOrder = (rects) => rects.every((rect, index) => {
+      if (index === 0) {
+        return true;
+      }
+
+      const previous = rects[index - 1];
+      return rect.top > previous.top + 1 ||
+        (Math.abs(rect.top - previous.top) <= 1 && rect.left > previous.left);
     });
-    // Distinct lefts, not first-row tops: stagger translateY breaks row banding.
-    const distinctX = new Set(visible.map((li) => Math.round(li.getBoundingClientRect().left)));
-    return { total: items.length, visible: visible.length, cols: distinctX.size };
+
+    const honorList = document.querySelector(".achievements .nominations ul");
+    const allHonors = Array.from(
+      document.querySelectorAll(".achievements .nominations li"),
+    );
+    const honors = visibleElements(".achievements .nominations li");
+    const honorRects = honors.map(rectFor);
+    const honorText = honors.flatMap((item) =>
+      Array.from(item.querySelectorAll(".title, .light")),
+    );
+    const honorRows = groupRows(honorRects);
+    const clippedHonorText = honorText.filter((element) =>
+      element.scrollWidth > element.clientWidth + 1 ||
+      element.scrollHeight > element.clientHeight + 1,
+    ).map((element) => element.textContent?.trim() ?? "");
+
+    const allBadges = Array.from(
+      document.querySelectorAll(".achievements .ribbons li"),
+    );
+    const badges = visibleElements(".achievements .ribbons li");
+    const badgeRects = badges.map(rectFor);
+    const badgeListRect = rectFor(
+      document.querySelector(".achievements .ribbons ul"),
+    );
+    const badgeRows = groupRows(badgeRects);
+    const finalBadgeRow = badgeRows.at(-1) ?? [];
+    const finalBadgeRowCenter = finalBadgeRow.length > 0
+      ? (
+          finalBadgeRow[0].left +
+          finalBadgeRow.at(-1).left +
+          finalBadgeRow.at(-1).width
+        ) / 2
+      : null;
+    const badgeListCenter = badgeListRect.left + badgeListRect.width / 2;
+
+    return {
+      honors: {
+        total: allHonors.length,
+        visible: honors.length,
+        columns: Math.max(0, ...honorRows.map((row) => row.length)),
+        rows: honorRows.length,
+        first: honorRects[0] ?? null,
+        last: honorRects.at(-1) ?? null,
+        itemHeight: honorRects[0]?.height ?? null,
+        listWidth: honorList ? rectFor(honorList).width : null,
+        followsDomOrder: followsDomOrder(honorRects),
+        beforeContent: honorList
+          ? getComputedStyle(honorList, "::before").content
+          : null,
+        afterContent: honorList
+          ? getComputedStyle(honorList, "::after").content
+          : null,
+        clippedText: clippedHonorText,
+      },
+      badges: {
+        total: allBadges.length,
+        visible: badges.length,
+        columns: Math.max(0, ...badgeRows.map((row) => row.length)),
+        rows: badgeRows.length,
+        rowItemCounts: badgeRows.map((row) => row.length),
+        finalRowCenterOffset:
+          finalBadgeRowCenter === null
+            ? null
+            : Math.round(Math.abs(finalBadgeRowCenter - badgeListCenter) * 10) /
+              10,
+        listWidth: badgeListRect.width,
+        firstSize: badgeRects[0]
+          ? [badgeRects[0].width, badgeRects[0].height]
+          : null,
+        square: badgeRects.every(
+          (rect) => Math.abs(rect.width - rect.height) <= 1,
+        ),
+        followsDomOrder: followsDomOrder(badgeRects),
+        imagesLoaded: badges.every((item) => {
+          const image = item.querySelector("img");
+          return image?.complete && image.naturalWidth > 0;
+        }),
+      },
+      overflow:
+        document.documentElement.scrollWidth -
+        document.documentElement.clientWidth,
+    };
   });
 
-  if (viewport.target === false) {
+  if (viewport.width <= 767) {
     recordCheck(
-      `${browserName} ${viewport.name} achievements baseline (cols=${data.cols}, visible=${data.visible}) not two-col-forced`,
-      data.cols !== 2 || viewport.width < 768,
-      data,
+      `${browserName} ${viewport.name} achievements honors are ordered two-column rows`,
+      data.honors.total === 12 &&
+        data.honors.visible === 12 &&
+        data.honors.columns === 2 &&
+        data.honors.rows === 6 &&
+        data.honors.itemHeight === 104 &&
+        data.honors.listWidth <= 532 + OVERFLOW_TOLERANCE &&
+        data.honors.followsDomOrder &&
+        data.honors.first?.top < data.honors.last?.top &&
+        data.honors.beforeContent === "none" &&
+        data.honors.afterContent === "none" &&
+        data.honors.clippedText.length === 0 &&
+        data.overflow <= OVERFLOW_TOLERANCE,
+      data.honors,
+    );
+
+    const expectedBadgeColumns = viewport.width < 380 ? 4 : 5;
+    const expectedBadgeRows = Math.ceil(10 / expectedBadgeColumns);
+    recordCheck(
+      `${browserName} ${viewport.name} achievements badges use ${expectedBadgeColumns} ordered square columns`,
+      data.badges.total === 10 &&
+        data.badges.visible === 10 &&
+        data.badges.columns === expectedBadgeColumns &&
+        data.badges.rows === expectedBadgeRows &&
+        data.badges.listWidth <= 532 + OVERFLOW_TOLERANCE &&
+        data.badges.firstSize?.[0] <= 100 + OVERFLOW_TOLERANCE &&
+        data.badges.square &&
+        data.badges.followsDomOrder &&
+        data.badges.imagesLoaded &&
+        data.badges.finalRowCenterOffset <= OVERFLOW_TOLERANCE &&
+        data.overflow <= OVERFLOW_TOLERANCE,
+      data.badges,
     );
   } else {
+    const expectedHonorCount = viewport.width < 1024 ? 8 : 12;
+    const expectedHonorColumns = viewport.width < 1024 ? 4 : 6;
     recordCheck(
-      `${browserName} ${viewport.name} achievements two columns, all 12 present`,
-      data.cols === 2 && data.total === 12 && data.visible === 12,
+      `${browserName} ${viewport.name} achievements non-target baseline is preserved`,
+      data.honors.total === 12 &&
+        data.honors.visible === expectedHonorCount &&
+        data.honors.columns === expectedHonorColumns &&
+        data.honors.rows === 2 &&
+        data.honors.itemHeight === 150 &&
+        data.badges.total === 10 &&
+        data.badges.visible === 10 &&
+        data.badges.columns === 5 &&
+        data.badges.rows === 2 &&
+        data.badges.firstSize?.[0] === 100 &&
+        data.badges.square &&
+        data.badges.imagesLoaded &&
+        data.overflow <= OVERFLOW_TOLERANCE,
       data,
     );
   }
+
+  await context.close();
+};
+
+const waitForContentPayload = (page) =>
+  page.waitForFunction(
+    () =>
+      window.__homepageRouteLifecycle?.getState?.().contentPayloadReady === true,
+    undefined,
+    { timeout: 20000 },
+  );
+
+const waitForArticleListingVisible = async (page) => {
+  await page.evaluate(() => {
+    document.querySelector(".achievements .listing")?.scrollIntoView();
+  });
+  await page.waitForFunction(
+    () => {
+      const items = Array.from(
+        document.querySelectorAll(".achievements .listing li"),
+      );
+      return items.length > 0 && items.every((item) => {
+        const rect = item.getBoundingClientRect();
+        const style = getComputedStyle(item);
+        return style.display !== "none" &&
+          style.visibility !== "hidden" &&
+          Number(style.opacity) > 0.95 &&
+          rect.width > 0 &&
+          rect.height > 0;
+      });
+    },
+    undefined,
+    { timeout: 8000 },
+  );
+};
+
+const readArticleListing = (page) =>
+  page.evaluate(() => {
+    const items = Array.from(
+      document.querySelectorAll(".achievements .listing li"),
+    );
+    const entries = items.map((item) => {
+      const link = item.querySelector("a");
+      const rect = item.getBoundingClientRect();
+      const style = getComputedStyle(item);
+      return {
+        title: link?.textContent?.trim() ?? "",
+        href: link?.getAttribute("href") ?? "",
+        opacity: Number(style.opacity),
+        visible:
+          style.display !== "none" &&
+          style.visibility !== "hidden" &&
+          Number(style.opacity) > 0.95 &&
+          rect.width > 0 &&
+          rect.height > 0,
+      };
+    });
+
+    return {
+      total: entries.length,
+      visible: entries.filter((entry) => entry.visible).length,
+      titlesPresent: entries.every((entry) => entry.title.length > 0),
+      hrefsValid: entries.every((entry) =>
+        entry.href.startsWith("/#/article/"),
+      ),
+      entries,
+    };
+  });
+
+const navigateHash = async (page, hash, expectedPage) => {
+  await page.evaluate((nextHash) => {
+    window.location.hash = nextHash;
+  }, hash);
+  await waitForRoutePage(page, expectedPage);
+  await sleep(ROUTE_MINIMUM_SETTLE_MS);
+};
+
+const articleListingPasses = (data) =>
+  data.total === 15 &&
+  data.visible === 15 &&
+  data.titlesPresent &&
+  data.hrefsValid;
+
+const runAchievementsArticleCheck = async (
+  browserName,
+  browser,
+  viewport,
+  recordCheck,
+  events,
+) => {
+  const context = await newContextForViewport(browser, viewport);
+  const page = await createHarnessPage(context, viewport, events, {
+    baseUrl: BASE_URL,
+  });
+
+  await gotoRoute(page, "#/achievements/");
+  await waitForContentPayload(page);
+  await waitForArticleListingVisible(page);
+  const direct = await readArticleListing(page);
+  recordCheck(
+    `${browserName} ${viewport.name} achievements payload articles are visible after direct load`,
+    articleListingPasses(direct),
+    direct,
+  );
+
+  if (viewport.width === 390) {
+    await navigateHash(page, "#/about/", "about");
+    await navigateHash(page, "#/achievements/", "achievements");
+    await waitForArticleListingVisible(page);
+    const returned = await readArticleListing(page);
+    recordCheck(
+      `${browserName} ${viewport.name} achievements payload articles remain visible after route return`,
+      articleListingPasses(returned),
+      returned,
+    );
+  }
+
+  await context.close();
+};
+
+const runSlowAchievementsArticleCheck = async (
+  browserName,
+  browser,
+  viewport,
+  recordCheck,
+  events,
+) => {
+  const context = await newContextForViewport(browser, viewport);
+  const page = await createHarnessPage(context, viewport, events, {
+    baseUrl: BASE_URL,
+    slowApiDelayMs: 1400,
+  });
+
+  await page.goto(hashUrl("#/achievements/"), {
+    waitUntil: "domcontentloaded",
+  });
+  await waitForRoutePage(page, "achievements");
+  await sleep(500);
+  const pending = await page.evaluate(() => ({
+    contentPayloadReady:
+      window.__homepageRouteLifecycle?.getState?.().contentPayloadReady ?? null,
+    currentPage:
+      window.__homepageRouteLifecycle?.getState?.().currentPage ?? null,
+    sectionVisible:
+      getComputedStyle(document.querySelector(".achievements")).display !==
+      "none",
+    staticIntroPresent: Boolean(
+      document.querySelector(".achievements .col-l p"),
+    ),
+  }));
+  recordCheck(
+    `${browserName} ${viewport.name} achievements static content is available while payload is pending`,
+    pending.contentPayloadReady === false &&
+      pending.currentPage === "achievements" &&
+      pending.sectionVisible &&
+      pending.staticIntroPresent,
+    pending,
+  );
+
+  await waitForContentPayload(page);
+  await waitForArticleListingVisible(page);
+  const ready = await readArticleListing(page);
+  recordCheck(
+    `${browserName} ${viewport.name} achievements payload articles reveal after slow API`,
+    articleListingPasses(ready),
+    ready,
+  );
+
+  await context.close();
+};
+
+const runAchievementsListingFailOpenCheck = async (
+  browserName,
+  browser,
+  viewport,
+  recordCheck,
+  events,
+) => {
+  const context = await newContextForViewport(browser, viewport);
+  const page = await createHarnessPage(context, viewport, events, {
+    baseUrl: BASE_URL,
+    slowApiDelayMs: 1400,
+  });
+
+  await page.goto(hashUrl("#/achievements/"), {
+    waitUntil: "domcontentloaded",
+  });
+  await waitForRoutePage(page, "achievements");
+  await page.evaluate(() => {
+    document.querySelector(".achievements .listing h2")?.remove();
+  });
+  await waitForContentPayload(page);
+
+  let visibilityWaitError = null;
+  try {
+    await waitForArticleListingVisible(page);
+  } catch (error) {
+    visibilityWaitError = error instanceof Error ? error.message : String(error);
+  }
+
+  const listing = await readArticleListing(page);
+  const headingPresent = await page.evaluate(() =>
+    Boolean(document.querySelector(".achievements .listing h2")),
+  );
+  recordCheck(
+    `${browserName} ${viewport.name} achievements listing fails open when its heading is missing`,
+    !headingPresent &&
+      visibilityWaitError === null &&
+      articleListingPasses(listing),
+    { headingPresent, visibilityWaitError, listing },
+  );
+
+  await context.close();
+};
+
+const readPersistentWatcherCallbackCounts = (page) =>
+  page.evaluate(() => {
+    const lifecycle = window.__homepageLegacyLifecycle;
+    const count = (watcher) => watcher?.callbacks?.enterViewport?.length ?? null;
+
+    return {
+      nominations: count(lifecycle?.nominationsWatcher),
+      ribbons: count(lifecycle?.ribbonsWatcher),
+      listings: count(lifecycle?.listingsWatcher),
+      skills: count(lifecycle?.skillsWatcher),
+      logos: count(lifecycle?.logosWatcher),
+    };
+  });
+
+const navigateHashAndMeasure = async (page, hash, expectedPage) => {
+  const startedAt = Date.now();
+  await page.evaluate((nextHash) => {
+    window.location.hash = nextHash;
+  }, hash);
+  await waitForRoutePage(page, expectedPage);
+  return Date.now() - startedAt;
+};
+
+const runPersistentWatcherAndAchievementsExitCheck = async (
+  browserName,
+  browser,
+  viewport,
+  recordCheck,
+  events,
+) => {
+  const context = await newContextForViewport(browser, viewport);
+  const page = await createHarnessPage(context, viewport, events, {
+    baseUrl: BASE_URL,
+  });
+
+  await gotoRoute(page, "#/achievements/");
+  await waitForContentPayload(page);
+  const initialCounts = await readPersistentWatcherCallbackCounts(page);
+  const cycles = [];
+
+  for (let cycle = 1; cycle <= 5; cycle += 1) {
+    const achievementsExitMs = await navigateHashAndMeasure(
+      page,
+      "#/about/",
+      "about",
+    );
+    const achievementsEnterMs = await navigateHashAndMeasure(
+      page,
+      "#/achievements/",
+      "achievements",
+    );
+    cycles.push({
+      cycle,
+      achievementsExitMs,
+      achievementsEnterMs,
+      callbackCounts: await readPersistentWatcherCallbackCounts(page),
+    });
+  }
+
+  const finalCounts = cycles.at(-1)?.callbackCounts ?? {};
+  const maximumExitMs = Math.max(
+    ...cycles.map((cycle) => cycle.achievementsExitMs),
+  );
+  const maximumEnterMs = Math.max(
+    ...cycles.map((cycle) => cycle.achievementsEnterMs),
+  );
+  const watcherCountsStable =
+    initialCounts.nominations === 1 &&
+    initialCounts.ribbons === 1 &&
+    initialCounts.listings === 1 &&
+    cycles.every(
+      ({ callbackCounts }) =>
+        callbackCounts.nominations === 1 &&
+        callbackCounts.ribbons === 1 &&
+        callbackCounts.listings === 1 &&
+        callbackCounts.skills === 1 &&
+        callbackCounts.logos === 1,
+    );
+
+  recordCheck(
+    `${browserName} ${viewport.name} persistent reveal watcher callbacks stay bounded across five route cycles`,
+    watcherCountsStable,
+    { initialCounts, finalCounts, cycles },
+  );
+  recordCheck(
+    `${browserName} ${viewport.name} achievements exit remains below 1200ms across five route cycles`,
+    maximumExitMs < 1200,
+    { maximumExitMs, cycles },
+  );
+  recordCheck(
+    `${browserName} ${viewport.name} achievements entry remains below 1200ms across five route cycles`,
+    maximumEnterMs < 1200,
+    { maximumEnterMs, cycles },
+  );
 
   await context.close();
 };
@@ -335,7 +916,9 @@ const writeReport = async (result) => {
     "## Failures",
     "",
     ...(result.failures.length
-      ? result.failures.map((f) => `- ${f.label}: ${JSON.stringify(f.detail)}`)
+      ? result.failures.map((failure) =>
+          `- ${failure.name}: ${JSON.stringify(failure.details)}`,
+        )
       : ["- none"]),
     "",
   ];
@@ -356,7 +939,7 @@ const main = async () => {
         await runOverflowChecks(engine.name, browser, viewport, recordCheck, events);
       }
 
-      for (const viewport of [MOBILE_PORTRAIT[0], MOBILE_PORTRAIT[2]]) {
+      for (const viewport of [MOBILE_320, MOBILE_390]) {
         const events = createBrowserEvents();
         eventGroups.push(events);
         await runWechatOverflowCheck(engine.name, browser, viewport, recordCheck, events);
@@ -365,16 +948,70 @@ const main = async () => {
       for (const viewport of [...MOBILE_PORTRAIT, ...ADJACENCY]) {
         const events = createBrowserEvents();
         eventGroups.push(events);
-        await runAchievementsGridCheck(engine.name, browser, viewport, recordCheck, events);
+        await runAchievementsLayoutCheck(
+          engine.name,
+          browser,
+          viewport,
+          recordCheck,
+          events,
+        );
       }
 
-      for (const viewport of [MOBILE_PORTRAIT[0], MOBILE_PORTRAIT[2]]) {
+      for (const viewport of [MOBILE_390, TABLET_768, DESKTOP_1440]) {
+        const events = createBrowserEvents();
+        eventGroups.push(events);
+        await runAchievementsArticleCheck(
+          engine.name,
+          browser,
+          viewport,
+          recordCheck,
+          events,
+        );
+      }
+
+      {
+        const events = createBrowserEvents();
+        eventGroups.push(events);
+        await runSlowAchievementsArticleCheck(
+          engine.name,
+          browser,
+          MOBILE_390,
+          recordCheck,
+          events,
+        );
+      }
+
+      {
+        const events = createBrowserEvents();
+        eventGroups.push(events);
+        await runPersistentWatcherAndAchievementsExitCheck(
+          engine.name,
+          browser,
+          MOBILE_390,
+          recordCheck,
+          events,
+        );
+      }
+
+      {
+        const events = createBrowserEvents();
+        eventGroups.push(events);
+        await runAchievementsListingFailOpenCheck(
+          engine.name,
+          browser,
+          MOBILE_390,
+          recordCheck,
+          events,
+        );
+      }
+
+      for (const viewport of [MOBILE_320, MOBILE_390]) {
         const events = createBrowserEvents();
         eventGroups.push(events);
         await runTouchTargetCheck(engine.name, browser, viewport, recordCheck, events);
       }
 
-      for (const viewport of [MOBILE_PORTRAIT[0], MOBILE_LANDSCAPE[0], DESKTOP[1]]) {
+      for (const viewport of [MOBILE_320, MOBILE_LANDSCAPE[0], DESKTOP_1440]) {
         const events = createBrowserEvents();
         eventGroups.push(events);
         await runMenuCheck(engine.name, browser, viewport, recordCheck, events);
@@ -386,7 +1023,7 @@ const main = async () => {
 
   for (const events of eventGroups) {
     browserErrors +=
-      (events.consoleErrors?.length ?? 0) + (events.pageErrors?.length ?? 0);
+      (events.console?.length ?? 0) + (events.pageErrors?.length ?? 0);
   }
 
   const result = {
@@ -401,8 +1038,10 @@ const main = async () => {
 
   if (result.failures.length > 0) {
     console.error(`Mobile responsive verification FAILED: ${result.failures.length}`);
-    for (const f of result.failures) {
-      console.error(`  - ${f.label}: ${JSON.stringify(f.detail)}`);
+    for (const failure of result.failures) {
+      console.error(
+        `  - ${failure.name}: ${JSON.stringify(failure.details)}`,
+      );
     }
     console.error(OUT_DIR);
     process.exitCode = 1;

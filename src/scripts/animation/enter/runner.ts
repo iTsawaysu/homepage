@@ -1,7 +1,4 @@
-/**
- * Shared enter-animation helpers (P4).
- * Result/Failure shapes and DOM lookups used by simple, detail, about, and achievements.
- */
+/** Shared result shapes and DOM helpers for route-enter animations. */
 
 export type EnterAnimationFailure = {
   ok: false;
@@ -29,6 +26,7 @@ export type LegacyBaffleInstance = {
 export type LegacyScrollWatcher = {
   recalculateLocation?: () => unknown;
   enterViewport?: (callback: () => void) => unknown;
+  replaceEnterViewport?: (callback: () => void) => unknown;
 };
 
 export const getRequiredElement = <T extends Element>(
@@ -81,9 +79,26 @@ export const hasBaffleTextApi = (
 
 export const hasScrollWatcherApi = (
   value: unknown,
-  method: "recalculateLocation" | "enterViewport" = "recalculateLocation",
+  method:
+    | "recalculateLocation"
+    | "enterViewport"
+    | "replaceEnterViewport" = "recalculateLocation",
 ): value is LegacyScrollWatcher =>
   isObjectRecord(value) && typeof value[method] === "function";
+
+export const registerPersistentEnterCallback = (
+  watcher: LegacyScrollWatcher,
+  callback: () => void,
+): void => {
+  const replaceEnterViewport = watcher.replaceEnterViewport;
+
+  if (typeof replaceEnterViewport === "function") {
+    replaceEnterViewport.call(watcher, callback);
+    return;
+  }
+
+  watcher.enterViewport?.call(watcher, callback);
+};
 
 export const getErrorMessage = (error: unknown): string =>
   error instanceof Error ? error.message : String(error);

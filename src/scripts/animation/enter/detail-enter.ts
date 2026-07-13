@@ -1,7 +1,4 @@
-/**
- * Parameterized detail enter (case-study | article) — P4.
- * Same GSAP timings, baffle text prefixes, metadata hook (article only).
- */
+/** Parameterized enter animation for case-study and article detail routes. */
 
 import { getGsapEngine } from "../gsap";
 import { LEGACY_ANIMATION_TIMINGS } from "../timings";
@@ -144,7 +141,7 @@ const getWatcher = (
 };
 
 /**
- * Mirrors the pre-P4 baffle chain:
+ * Preserves the baffle chain:
  * text() → prefer return if has API → start() → prefer return if has API → reveal().
  */
 const revealDetailTitle = (

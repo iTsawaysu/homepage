@@ -9,7 +9,7 @@ export const sleep = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
 
 export const hashUrl = (baseUrl, hash) => `${baseUrl}/${hash}`;
 
-export const normalizeText = (value) => value.replace(/\s+/g, " ").trim();
+const normalizeText = (value) => value.replace(/\s+/g, " ").trim();
 
 export const htmlToText = (value) =>
   normalizeText(
@@ -52,7 +52,7 @@ const recordPageError = (events, error, pageErrorShape) => {
   });
 };
 
-export const attachPageEventCollectors = (
+const attachPageEventCollectors = (
   page,
   events,
   {
@@ -172,37 +172,6 @@ export const writeJsonFile = async (
     `${JSON.stringify(value, null, 2)}${trailingNewline ? "\n" : ""}`,
   );
 };
-
-/**
- * P2 RouteLifecycle observability helper.
- * Prefer window.__homepageRouteLifecycle; fall back to legacy bag while P3 lands.
- */
-export const getRouteState = (page) =>
-  page.evaluate(() => {
-    const mirror = window.__homepageRouteLifecycle?.getState?.();
-    if (mirror) {
-      return {
-        ...mirror,
-        ready: window.__homepageRouteLifecycle?.isReady?.() ?? false,
-        source: "route-lifecycle",
-      };
-    }
-
-    const lifecycle = window.__homepageLegacyLifecycle;
-    if (lifecycle && typeof lifecycle === "object") {
-      return {
-        currentPage:
-          typeof lifecycle.currentPage === "string" ? lifecycle.currentPage : "",
-        contentPayloadReady: Boolean(lifecycle.contentPayloadReady),
-        caseStudyTitle: lifecycle.caseStudyItem?.title ?? null,
-        articleTitle: lifecycle.articleItem?.title ?? null,
-        ready: true,
-        source: "legacy-lifecycle",
-      };
-    }
-
-    return null;
-  });
 
 export const waitForRoutePage = async (page, expectedPage, timeout = 20000) => {
   await page.waitForFunction(

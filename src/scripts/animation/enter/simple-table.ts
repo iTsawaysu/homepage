@@ -1,7 +1,4 @@
-/**
- * Table-driven enter animations for simple static routes (P4).
- * hello / error / contact / coding / design — same GSAP timings and selectors as before.
- */
+/** Table-driven enter animations for simple static routes. */
 
 import { getGsapEngine } from "../gsap";
 import {

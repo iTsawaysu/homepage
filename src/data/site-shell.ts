@@ -967,17 +967,51 @@ export const legacyStyleHtml = String.raw`    <style>
 
         .achievements .nominations ul {
           display: grid;
-          grid-template-columns: repeat(2, 1fr);
-          column-gap: 20px;
-          row-gap: 25px;
-          margin: 0;
+          grid-template-columns: repeat(2, minmax(0, 1fr));
+          gap: 10px;
+          margin: 0 auto;
+          max-width: 532px;
+        }
+
+        .achievements .nominations ul::before,
+        .achievements .nominations ul::after {
+          content: none;
+          display: none;
         }
 
         .achievements .nominations li {
           float: none;
           width: auto;
-          height: 150px;
+          height: 104px;
           margin: 0;
+        }
+
+        .achievements .nominations .title {
+          padding: 0 12px;
+          text-align: left;
+        }
+
+        .achievements .ribbons ul {
+          display: flex;
+          flex-wrap: wrap;
+          justify-content: center;
+          gap: 8px;
+          margin-left: auto;
+          margin-right: auto;
+          max-width: 532px;
+        }
+
+        .achievements .ribbons li {
+          aspect-ratio: 1;
+          flex: 0 0 calc((100% - 24px) / 4);
+          height: auto;
+          margin: 0;
+          width: calc((100% - 24px) / 4);
+        }
+
+        .achievements .ribbons li img {
+          max-height: 78%;
+          max-width: 78%;
         }
 
         .project-note {
@@ -1035,6 +1069,13 @@ export const legacyStyleHtml = String.raw`    <style>
 
         .contact-icons .wechat-item.is-open .wechat-card {
           transform: translate(0, 0) scale(1);
+        }
+      }
+
+      @media print, screen and (min-width: 380px) and (max-width: 767px) {
+        .achievements .ribbons li {
+          flex-basis: calc((100% - 32px) / 5);
+          width: calc((100% - 32px) / 5);
         }
       }
 

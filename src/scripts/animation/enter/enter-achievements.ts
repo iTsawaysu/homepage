@@ -1,7 +1,3 @@
-/**
- * Specialized achievements enter — algorithm unchanged; shared helpers only (P4).
- */
-
 import { getGsapEngine } from "../gsap";
 import { prepareLegacyTitleReveal } from "../title-reveal";
 import {
@@ -15,10 +11,12 @@ import {
   hasScrollWatcherApi,
   isFailure,
   okResult,
+  registerPersistentEnterCallback,
 } from "./runner";
 
 export type EnterAchievementsLegacyState = {
   bAchievements?: unknown;
+  contentPayloadReady?: unknown;
   nominationsWatcher?: unknown;
   ribbonsWatcher?: unknown;
   listingsWatcher?: unknown;
@@ -35,6 +33,9 @@ declare global {
 }
 
 const MOBILE_QUERY = "(max-width: 767px)" as const;
+const MOBILE_NOMINATION_COLUMNS = 2;
+const MOBILE_NOMINATION_ROW_DELAY_SECONDS = 0.08;
+const NOMINATION_ITEM_DELAY_SECONDS = 0.1;
 
 const getLegacyWatcher = (
   legacyState: EnterAchievementsLegacyState,
@@ -57,6 +58,83 @@ const addNominationInitClass = (pattern: HTMLElement): void => {
   pattern.parentElement?.parentElement?.classList.add("init");
 };
 
+const makeListingVisible = (elements: HTMLElement[]): void => {
+  elements.forEach((element) => {
+    element.style.opacity = "1";
+    element.style.transform = "translateY(0)";
+  });
+};
+
+export const runAchievementsListingReveal = (
+  legacyState: EnterAchievementsLegacyState,
+): EnterAchievementsAnimationResult => {
+  const headings = getRequiredElements<HTMLElement>(
+    ".achievements .listing h2",
+  );
+  const items = getRequiredElements<HTMLElement>(
+    ".achievements .listing li",
+  );
+  const availableTargets = [
+    ...(isFailure(headings) ? [] : headings),
+    ...(isFailure(items) ? [] : items),
+  ];
+
+  if (isFailure(headings)) {
+    makeListingVisible(availableTargets);
+    return headings;
+  }
+
+  if (isFailure(items)) {
+    makeListingVisible(availableTargets);
+    return items;
+  }
+
+  const allTargets = [...headings, ...items];
+  const reveal = () => {
+    const gsap = getGsapEngine();
+
+    gsap.to(headings, {
+      opacity: 1,
+      y: 0,
+      duration: 0.5,
+      ease: "expo.out",
+      stagger: 0.1,
+    });
+    gsap.to(items, {
+      opacity: 1,
+      y: 0,
+      duration: 0.5,
+      ease: "expo.out",
+      delay: 0.2,
+      stagger: 0.1,
+    });
+  };
+
+  try {
+    if (isMobileBranch()) {
+      const watcher = getLegacyWatcher(legacyState, "listingsWatcher");
+
+      if (isFailure(watcher)) {
+        makeListingVisible(allTargets);
+        return watcher;
+      }
+
+      registerPersistentEnterCallback(watcher, reveal);
+    } else {
+      reveal();
+    }
+
+    return okResult();
+  } catch (error) {
+    makeListingVisible(allTargets);
+    return failResult(
+      `achievements-listing-reveal-error:${
+        error instanceof Error ? error.message : String(error)
+      }`,
+    );
+  }
+};
+
 export const runEnterAchievementsAnimation = (
   legacyState: EnterAchievementsLegacyState,
   options: EnterAnimationOptions,
@@ -76,8 +154,6 @@ export const runEnterAchievementsAnimation = (
   const ribbonItems = getRequiredElements<HTMLElement>(
     ".achievements .ribbons li",
   );
-  const listingHeadings = getRequiredElements<HTMLElement>(".listing h2");
-  const listingItems = getRequiredElements<HTMLElement>(".listing li");
   const titleReveal = prepareLegacyTitleReveal({
     legacyState,
     routeName: "achievements",
@@ -121,22 +197,12 @@ export const runEnterAchievementsAnimation = (
     return ribbonItems;
   }
 
-  if (isFailure(listingHeadings)) {
-    return listingHeadings;
-  }
-
-  if (isFailure(listingItems)) {
-    return listingItems;
-  }
-
   if (isFailure(titleReveal)) {
     return titleReveal;
   }
 
-  const mobileBranch = isMobileBranch();
   const nominationsWatcher = getLegacyWatcher(legacyState, "nominationsWatcher");
   const ribbonsWatcher = getLegacyWatcher(legacyState, "ribbonsWatcher");
-  let listingsWatcher: LegacyScrollWatcher | null = null;
 
   if (isFailure(nominationsWatcher)) {
     return nominationsWatcher;
@@ -146,20 +212,8 @@ export const runEnterAchievementsAnimation = (
     return ribbonsWatcher;
   }
 
-  if (mobileBranch) {
-    const mobileListingsWatcher = getLegacyWatcher(
-      legacyState,
-      "listingsWatcher",
-    );
-
-    if (isFailure(mobileListingsWatcher)) {
-      return mobileListingsWatcher;
-    }
-
-    listingsWatcher = mobileListingsWatcher;
-  }
-
   const gsap = getGsapEngine();
+  const mobileBranch = isMobileBranch();
 
   gsap.to(bar, {
     width: "100%",
@@ -193,7 +247,7 @@ export const runEnterAchievementsAnimation = (
     delay: 0.2,
   });
 
-  nominationsWatcher.enterViewport?.(() => {
+  registerPersistentEnterCallback(nominationsWatcher, () => {
     gsap.to(headings, {
       opacity: 1,
       y: 0,
@@ -206,7 +260,10 @@ export const runEnterAchievementsAnimation = (
         scale: 1,
         duration: 0.5,
         ease: "expo.out",
-        delay: 0.1 * index,
+        delay: mobileBranch
+          ? MOBILE_NOMINATION_ROW_DELAY_SECONDS *
+            Math.floor(index / MOBILE_NOMINATION_COLUMNS)
+          : NOMINATION_ITEM_DELAY_SECONDS * index,
         onStart: () => addNominationInitClass(pattern),
       });
     });
@@ -217,7 +274,7 @@ export const runEnterAchievementsAnimation = (
     });
   });
 
-  ribbonsWatcher.enterViewport?.(() => {
+  registerPersistentEnterCallback(ribbonsWatcher, () => {
     gsap.to(ribbonsText, {
       opacity: 1,
       y: 0,
@@ -235,28 +292,12 @@ export const runEnterAchievementsAnimation = (
     });
   });
 
-  const revealListing = () => {
-    gsap.to(listingHeadings, {
-      opacity: 1,
-      y: 0,
-      duration: 0.5,
-      ease: "expo.out",
-      stagger: 0.1,
-    });
-    gsap.to(listingItems, {
-      opacity: 1,
-      y: 0,
-      duration: 0.5,
-      ease: "expo.out",
-      delay: 0.2,
-      stagger: 0.1,
-    });
-  };
+  if (legacyState.contentPayloadReady) {
+    const listingResult = runAchievementsListingReveal(legacyState);
 
-  if (mobileBranch) {
-    listingsWatcher?.enterViewport?.(revealListing);
-  } else {
-    revealListing();
+    if (isFailure(listingResult)) {
+      options.onAsyncFallback(listingResult.reason);
+    }
   }
 
   return okResult();

@@ -13,6 +13,12 @@ export type NativeScrollWatcher = {
   destroy(): void;
 };
 
+export type PersistentNativeScrollWatcher = NativeScrollWatcher & {
+  replaceEnterViewport(
+    callback: ViewportCallback,
+  ): PersistentNativeScrollWatcher;
+};
+
 const getElements = (target: Element | HTMLCollection | NodeList | Element[]) => {
   if (target instanceof Element) {
     return [target];
@@ -36,13 +42,13 @@ const isVisibleWithOffset = (element: Element, offsetPx: number): boolean => {
 export const createNativeScrollWatcher = (
   target: Element | HTMLCollection | NodeList | Element[],
   offsetPx = -100,
-): NativeScrollWatcher => {
+): PersistentNativeScrollWatcher => {
   const elements = getElements(target);
   let destroyed = false;
   let isInsideViewport = false;
   let observer: IntersectionObserver | null = null;
 
-  const watcher: NativeScrollWatcher = {
+  const watcher: PersistentNativeScrollWatcher = {
     callbacks: {
       enterViewport: [],
     },
@@ -54,6 +60,19 @@ export const createNativeScrollWatcher = (
       watcher.callbacks.enterViewport.push(callback);
       window.setTimeout(() => {
         runIfVisible(callback);
+      }, 0);
+      return watcher;
+    },
+    replaceEnterViewport(callback) {
+      watcher.callbacks.enterViewport.splice(
+        0,
+        watcher.callbacks.enterViewport.length,
+        callback,
+      );
+      window.setTimeout(() => {
+        if (watcher.callbacks.enterViewport[0] === callback) {
+          runIfVisible(callback);
+        }
       }, 0);
       return watcher;
     },

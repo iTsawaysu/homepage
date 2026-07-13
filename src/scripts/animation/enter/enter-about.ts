@@ -1,6 +1,4 @@
-/**
- * Specialized about enter — algorithm unchanged; shared helpers only (P4).
- */
+/** Specialized enter animation for the About route. */
 
 import {
   ABOUT_BRANCH_CONTRACT,
@@ -26,6 +24,7 @@ import {
   isFailure,
   isObjectRecord,
   okResult,
+  registerPersistentEnterCallback,
 } from "./runner";
 
 export type EnterAboutLegacyState = {
@@ -334,7 +333,7 @@ export const runEnterAboutAnimation = (
       return logosWatcher;
     }
 
-    skillsWatcher.enterViewport?.(() => {
+    registerPersistentEnterCallback(skillsWatcher, () => {
       gsap.to(heading, {
         opacity: 1,
         y: 0,
@@ -352,7 +351,7 @@ export const runEnterAboutAnimation = (
       animateSkills(skillTargets, ABOUT_ROUTE_ENTER_TIMINGS.mobile, options);
     });
 
-    logosWatcher.enterViewport?.(() => {
+    registerPersistentEnterCallback(logosWatcher, () => {
       gsap.to(rule, {
         width: "100%",
         duration: ABOUT_ROUTE_ENTER_TIMINGS.mobile.rule.durationSeconds,

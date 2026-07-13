@@ -1,16 +1,3 @@
-export {
-  ARTICLE_BACK_LISTING_CATEGORY,
-  ARTICLE_BACK_LISTING_HREF,
-  DETAIL_ROUTE_RETRY_CONTRACTS,
-  getArticleBackListingCategory,
-  getArticleBackListingHref,
-  getDetailRouteRetryContract,
-  getNextCircularIndex,
-  type ActiveNavCategory,
-  type CaseStudyCategory,
-  type DetailRouteRetryContract,
-} from "./routes";
-
 type ActiveNavApplyResult =
   | {
       ok: true;

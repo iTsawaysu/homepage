@@ -24,6 +24,7 @@ const GENERIC_DESCRIPTION =
 const EXIT_DURATION = LEGACY_ANIMATION_TIMINGS.routeExitDurationSeconds;
 const EXIT_STEP = LEGACY_ANIMATION_TIMINGS.routeExitDelayStepSeconds;
 const EXIT_STAGGER = LEGACY_ANIMATION_TIMINGS.routeExitStaggerSeconds;
+const ACHIEVEMENTS_EXIT_STAGGER = EXIT_STAGGER / 4;
 
 const exitFallbackMs = (delaySeconds: number): number =>
   Math.round((EXIT_DURATION + delaySeconds) * 1000);
@@ -188,7 +189,7 @@ export const runExitCurrentSlideLifecycle = (
         );
         break;
       case "achievements":
-        runAfterTween(
+        toIfPresent(
           ".nominations li",
           {
             opacity: 0,
@@ -196,19 +197,10 @@ export const runExitCurrentSlideLifecycle = (
             duration: EXIT_DURATION,
             ease: "expo.inOut",
             delay: EXIT_STEP * 2,
-            stagger: EXIT_STAGGER,
+            stagger: ACHIEVEMENTS_EXIT_STAGGER,
+            onComplete: clearNominationStyles,
           },
-          exitFallbackMs(EXIT_STEP * 2),
-          clearNominationStyles,
         );
-        toIfPresent(".achievements .link", {
-          opacity: 0,
-          y: -50,
-          duration: EXIT_DURATION,
-          ease: "expo.inOut",
-          delay: EXIT_STEP * 2,
-          clearProps: "all",
-        });
         toIfPresent(".ribbons li", {
           opacity: 0,
           y: -50,
@@ -216,9 +208,9 @@ export const runExitCurrentSlideLifecycle = (
           ease: "expo.inOut",
           delay: EXIT_STEP * 2,
           clearProps: "all",
-          stagger: EXIT_STAGGER,
+          stagger: ACHIEVEMENTS_EXIT_STAGGER,
         });
-        runAfterTween(
+        toIfPresent(
           ".listing li",
           {
             opacity: 0,
@@ -227,7 +219,18 @@ export const runExitCurrentSlideLifecycle = (
             ease: "expo.inOut",
             delay: EXIT_STEP * 2,
             clearProps: "all",
-            stagger: EXIT_STAGGER,
+            stagger: ACHIEVEMENTS_EXIT_STAGGER,
+          },
+        );
+        runAfterTween(
+          ".achievements .link",
+          {
+            opacity: 0,
+            y: -50,
+            duration: EXIT_DURATION,
+            ease: "expo.inOut",
+            delay: EXIT_STEP * 2,
+            clearProps: "all",
           },
           exitFallbackMs(EXIT_STEP * 2),
           () => callSwitchSlide(legacyState, target),

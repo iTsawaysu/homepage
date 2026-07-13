@@ -49,7 +49,7 @@ const routeCurrentHash = (): void => {
 };
 
 const startRouter = (): boolean => {
-  // P3: ready-gate only on RouteLifecycle.
+  // Route dispatch starts only after RouteLifecycle is installed.
   if (isStarted || !getRouteLifecycle()?.isReady()) {
     return false;
   }

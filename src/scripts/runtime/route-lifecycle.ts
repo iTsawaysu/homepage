@@ -27,9 +27,9 @@ import { runResetSlideLifecycle } from "../animation/slide-reset";
 import { runSwitchSlideLifecycle } from "../animation/slide-switch";
 
 /**
- * Deep RouteLifecycle (P3): narrow production interface + navigate orchestration.
+ * Narrow production interface and hash-navigation orchestration.
  * Internal state bag still hosts baffles/watchers/items for enter/slide/detail
- * implementations; those methods are wired directly (no capture/monkey-patch).
+ * implementations without exposing them through the production interface.
  */
 
 type RouteLifecycleState = {
@@ -90,9 +90,9 @@ const ENTER_METHOD_BY_STATIC_ROUTE = {
   contact: "enterContact",
 } as const;
 
-/** Silent async fallback — production has no legacy method body to re-enter. */
+/** Enter runners require a callback; production has no alternate animation backend. */
 const silentAsyncFallback = (_reason: string): void => {
-  // Intentionally empty: P3 removed noop→legacy fallback path.
+  // Intentionally empty.
 };
 
 const queryTargets = (selector: string): HTMLElement[] =>
@@ -124,8 +124,6 @@ const prepareRouteTitleReveal = (routeName: StaticRouteName): void => {
 
 /**
  * Bind slide/enter/detail implementations onto the mutable lifecycle bag.
- * Replaces the P1/P2 capture + wrapMethod monkey-patch path.
- *
  * Enter runners take narrow structural types (baffle keys, watchers, etc.).
  * The production bag is a superset; cast through unknown for the call boundary.
  */

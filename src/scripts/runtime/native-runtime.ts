@@ -1,3 +1,4 @@
+import { runAchievementsListingReveal } from "../animation/enter/enter-achievements";
 import { createNativeAnalytics, type NativeAnalytics } from "./analytics";
 import {
   createArticleDetailWatcher,
@@ -10,7 +11,7 @@ import { installNativeModernizr } from "./modernizr";
 import { createNativeBaffle, type NativeBaffleInstance } from "./native-baffle";
 import {
   createNativeScrollWatcher,
-  type NativeScrollWatcher,
+  type PersistentNativeScrollWatcher,
 } from "./native-scroll-watcher";
 import {
   installRouteLifecycle,
@@ -48,7 +49,7 @@ type ContentPayload = {
 
 type NativeLifecycleMethod = (...args: unknown[]) => unknown;
 
-export type NativeLifecycleInstance = RouteLifecycleBag & {
+type NativeLifecycleInstance = RouteLifecycleBag & {
   caseStudies: ContentPayload["caseStudies"];
   articles: ContentPayload["articles"];
   ind?: number;
@@ -67,11 +68,11 @@ export type NativeLifecycleInstance = RouteLifecycleBag & {
   bArticle: NativeBaffleInstance;
   bError: NativeBaffleInstance;
   bSkillsLabel: NativeBaffleInstance[];
-  skillsWatcher: NativeScrollWatcher;
-  logosWatcher: NativeScrollWatcher;
-  ribbonsWatcher: NativeScrollWatcher;
-  nominationsWatcher: NativeScrollWatcher;
-  listingsWatcher: NativeScrollWatcher;
+  skillsWatcher: PersistentNativeScrollWatcher;
+  logosWatcher: PersistentNativeScrollWatcher;
+  ribbonsWatcher: PersistentNativeScrollWatcher;
+  nominationsWatcher: PersistentNativeScrollWatcher;
+  listingsWatcher: PersistentNativeScrollWatcher;
   caseStudyWatcher?: AggregateScrollWatcher;
   articleWatcher?: AggregateScrollWatcher;
   analytics: NativeAnalytics;
@@ -116,7 +117,7 @@ const unboundMethod: NativeLifecycleMethod = () => {
   throw new Error("RouteLifecycle methods not wired yet");
 };
 
-const watcherForSelector = (selector: string): NativeScrollWatcher =>
+const watcherForSelector = (selector: string): PersistentNativeScrollWatcher =>
   createNativeScrollWatcher(document.querySelectorAll(selector), -100);
 
 const populateCards = (
@@ -202,6 +203,14 @@ const fetchContentPayload = async (
     const payload = (await response.json()) as ContentPayload;
     lifecycle.populateData(payload);
     lifecycle.contentPayloadReady = true;
+
+    if (
+      lifecycle.currentPage === "achievements" &&
+      ["#/achievements", "#/achievements/"].includes(window.location.hash)
+    ) {
+      runAchievementsListingReveal(lifecycle);
+    }
+
     refreshScrollWatchers();
   } catch (error) {
     showNativeToaster(
@@ -320,4 +329,3 @@ export const initNativeRuntimeHost = (): NativeRuntimeHost => {
 
   return host;
 };
-
